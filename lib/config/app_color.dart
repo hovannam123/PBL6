@@ -14,6 +14,7 @@ class DarkTheme {
   static const darkGrey = Color(0xFF42476A);
   static const darkBackground = Color(0xFF030614);
   static const darkerBackground = Color(0xFF0B0F2F);
+  static const bg = Color(0xFF222222);
   static const veryDark = Color(0xFF051138);
   static const red = Color(0xFFFD4C00);
   static const green = Color(0xFF3E9D9D);

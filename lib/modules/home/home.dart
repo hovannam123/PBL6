@@ -6,17 +6,18 @@ import 'package:pbl6/config/app_color.dart';
 import 'package:pbl6/config/app_text_style.dart';
 import 'package:pbl6/model/genres.dart';
 import 'package:pbl6/modules/home/components/category_bar.dart';
-import 'package:pbl6/modules/home/components/filter.dart';
 import 'package:pbl6/modules/home/components/search_bar.dart';
 
-class Appbar extends StatefulWidget {
-  const Appbar({Key? key}) : super(key: key);
+import 'components/item.dart';
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<Appbar> createState() => _AppbarState();
+  State<Home> createState() => _HomeState();
 }
 
-class _AppbarState extends State<Appbar> {
+class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   final tabs = [
@@ -25,7 +26,10 @@ class _AppbarState extends State<Appbar> {
         children: [
           SizedBox(height: 10,),
           CategoryBar(),
-          SearchBar()
+          SearchBar(),
+          Expanded(
+            child: Item()
+          )
         ],
       ),
     ),
@@ -60,10 +64,10 @@ class _AppbarState extends State<Appbar> {
           backgroundColor: DarkTheme.purple,
           elevation: 20,
         ),
-        body: SingleChildScrollView(child: tabs[_selectedIndex],),
+        body: Container(child: tabs[_selectedIndex],),
         bottomNavigationBar: BottomNavigationBar(
           iconSize: 25,
-          selectedLabelStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+          selectedLabelStyle: AppTextStyle.heading3,
           unselectedLabelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
 
           items: [

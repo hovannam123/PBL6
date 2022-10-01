@@ -54,7 +54,7 @@ class _CategoryBarState extends State<CategoryBar> {
                         ]
                     )
                 ) : const BoxDecoration(color: Colors.transparent),
-                child: Text('${lstGenres?[index].name}', style: AppTextStyle.heading4Light,),
+                child: Text('${lstGenres?[index].name}', style: AppTextStyle.heading3,),
               ),
             );
           }

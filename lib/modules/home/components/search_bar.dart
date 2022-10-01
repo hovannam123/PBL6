@@ -35,12 +35,18 @@ class SearchBar extends StatelessWidget {
                 child: TextField(
                   decoration: InputDecoration(
                       hintText: 'Search',
-                      hintStyle: AppTextStyle.h,
+                      hintStyle: AppTextStyle.heading4Light,
                       border: InputBorder.none,
                   ),
                 ),
               ),
-              Image.asset('assets/images/img_3.png')
+              Container(
+                child: FloatingActionButton(
+                  onPressed: (){},
+                  backgroundColor: Colors.grey,
+                  child: Image.asset('assets/images/filter.png'),
+                ),
+              )
             ],
           ),
         ),
