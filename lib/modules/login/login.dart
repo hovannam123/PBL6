@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_text_style.dart';
+import 'package:pbl6/modules/register/register.dart';
 
 import '../../config/app_color.dart';
 
@@ -40,7 +41,9 @@ class _LoginState extends State<Login> {
                   children: [
                     const Text('You can', style: AppTextStyle.heading3Light),
                     TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
+                        },
                         child: const Text('Register here !', style: AppTextStyle.heading3Purple,)),
                   ],
                 ),
@@ -50,7 +53,7 @@ class _LoginState extends State<Login> {
                   child: Container(
                     height: size.height/15,
                     decoration: BoxDecoration(
-                      color: DarkTheme.veryDark,
+                      color: DarkTheme.darkBlueIllustration,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -61,10 +64,10 @@ class _LoginState extends State<Login> {
                         ),
                         Expanded(
                           child: TextField(
-                            style: AppTextStyle.heading4Light,
+                            style: AppTextStyle.heading3Light,
                             decoration: InputDecoration(
                                 hintText: 'Enter your email address',
-                                hintStyle: AppTextStyle.heading4Light,
+                                hintStyle: AppTextStyle.heading3Light,
                                 border: InputBorder.none
                             ),
                           ),
@@ -79,7 +82,7 @@ class _LoginState extends State<Login> {
                   child: Container(
                     height: size.height/15,
                     decoration: BoxDecoration(
-                      color: DarkTheme.veryDark,
+                      color: DarkTheme.darkBlueIllustration,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -90,11 +93,11 @@ class _LoginState extends State<Login> {
                         ),
                         Expanded(
                           child: TextField(
-                            style: AppTextStyle.heading4Light,
+                            style: AppTextStyle.heading3Light,
                             obscureText: passwordVisible,
                             decoration: InputDecoration(
                                 hintText: 'Enter your password',
-                                hintStyle: AppTextStyle.heading4Light,
+                                hintStyle: AppTextStyle.heading3Light,
                                 border: InputBorder.none,
                                 suffixIcon: IconButton(
                                   icon: Icon(
@@ -155,7 +158,7 @@ class _LoginState extends State<Login> {
                       ),
                       onPressed: (){},
                       child: const Center(
-                          child: Text('Login', style: AppTextStyle.heading3Light,)
+                          child: Text('Login', style: AppTextStyle.heading2,)
                       )),
                 ),
                 SizedBox(height: 20,),
@@ -171,9 +174,9 @@ class _LoginState extends State<Login> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        FloatingActionButton(onPressed: (){}, child: Image.asset('assets/images/logo_fb.png'),backgroundColor: DarkTheme.darkBackground),
-                        FloatingActionButton(onPressed: (){}, child: Image.asset('assets/images/logo_apple.png'),backgroundColor: DarkTheme.darkBackground),
-                        FloatingActionButton(onPressed: (){}, child: Image.asset('assets/images/logo_google.png'),backgroundColor: DarkTheme.darkBackground)
+                        FloatingActionButton(heroTag: null, onPressed: (){}, child: Image.asset('assets/images/logo_fb.png'),backgroundColor: DarkTheme.darkBackground),
+                        FloatingActionButton(heroTag: null, onPressed: (){}, child: Image.asset('assets/images/logo_apple.png'),backgroundColor: DarkTheme.darkBackground),
+                        FloatingActionButton(heroTag: null, onPressed: (){}, child: Image.asset('assets/images/logo_google.png'),backgroundColor: DarkTheme.darkBackground)
                       ],
                     ),
                   ),

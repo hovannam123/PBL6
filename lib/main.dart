@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_color.dart';
-import 'package:pbl6/modules/home/components/item.dart';
+import 'package:pbl6/modules/home/components/item_pages.dart';
 import 'package:pbl6/modules/register/register.dart';
 
 import 'modules/home/home.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           displayColor:Colors.white
         )
       ),
-      home: Home(),
+      home: const Home(),
     );
   }
 }

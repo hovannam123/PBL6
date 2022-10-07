@@ -44,15 +44,10 @@ class _CategoryBarState extends State<CategoryBar> {
               child: Container(
                 margin: const EdgeInsets.only(left: 16),
                 alignment: Alignment.center,
-                width: 100,
+                width: 110,
                 decoration: selectedIndex == index ? BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    gradient: LinearGradient(
-                        colors: [
-                          GradientPalette.lightBlue1,
-                          GradientPalette.lightBlue2,
-                        ]
-                    )
+                    color: Colors.blueGrey
                 ) : const BoxDecoration(color: Colors.transparent),
                 child: Text('${lstGenres?[index].name}', style: AppTextStyle.heading3,),
               ),

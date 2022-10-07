@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_color.dart';
 import 'package:pbl6/config/app_text_style.dart';
 
+import '../login/login.dart';
+
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -30,12 +32,14 @@ class _RegisterState extends State<Register> {
                   children: [
                     Text('You can', style: AppTextStyle.heading3Light,),
                     TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> Login()));
+                        },
                         child: Text('Login here !', style: AppTextStyle.heading3Purple,))
                   ],
                 ),
                 SizedBox(height: 40,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Email', style: AppTextStyle.h,),),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Email', style: AppTextStyle.heading4Light,),),
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white, width:1),
@@ -45,13 +49,13 @@ class _RegisterState extends State<Register> {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.email_outlined, color: Colors.white,),
                         hintText: 'Enter your email address',
-                        hintStyle: AppTextStyle.heading4Light,
+                        hintStyle: AppTextStyle.heading3Light,
                         border: InputBorder.none
                     ),
                   ),
                 ),
                 SizedBox(height: 20,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Username', style: AppTextStyle.h,),),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Username', style: AppTextStyle.heading4Light,),),
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white, width:1),
@@ -61,13 +65,13 @@ class _RegisterState extends State<Register> {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.person_outline, color: Colors.white,),
                         hintText: 'Enter your username',
-                        hintStyle: AppTextStyle.heading4Light,
+                        hintStyle: AppTextStyle.heading3Light,
                         border: InputBorder.none
                     ),
                   ),
                 ),
                 SizedBox(height: 20,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Password', style: AppTextStyle.h,),),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Password', style: AppTextStyle.heading4Light,),),
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white, width:1),
@@ -77,13 +81,13 @@ class _RegisterState extends State<Register> {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock_outline_rounded, color: Colors.white,),
                         hintText: 'Enter your password',
-                        hintStyle: AppTextStyle.heading4Light,
+                        hintStyle: AppTextStyle.heading3Light,
                         border: InputBorder.none
                     ),
                   ),
                 ),
                 SizedBox(height: 20,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Confirm Password', style: AppTextStyle.h,),),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Confirm Password', style: AppTextStyle.heading4Light,),),
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white, width:1),
@@ -93,7 +97,7 @@ class _RegisterState extends State<Register> {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock_outline_rounded, color: Colors.white,),
                         hintText: 'Confirm your password',
-                        hintStyle: AppTextStyle.heading4Light,
+                        hintStyle: AppTextStyle.heading3Light,
                         border: InputBorder.none
                     ),
                   ),
@@ -112,7 +116,7 @@ class _RegisterState extends State<Register> {
                       ),
                       onPressed: (){},
                       child: const Center(
-                          child: Text('Register', style: AppTextStyle.heading3Light,)
+                          child: Text('Register', style: AppTextStyle.heading2,)
                       )),
                 ),
               ],

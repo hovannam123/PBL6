@@ -1,5 +1,7 @@
 
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_color.dart';
@@ -8,7 +10,7 @@ import 'package:pbl6/model/genres.dart';
 import 'package:pbl6/modules/home/components/category_bar.dart';
 import 'package:pbl6/modules/home/components/search_bar.dart';
 
-import 'components/item.dart';
+import 'components/item_pages.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -25,10 +27,20 @@ class _HomeState extends State<Home> {
       child: Column(
         children: [
           SizedBox(height: 10,),
-          CategoryBar(),
-          SearchBar(),
+          Container(
+            child: Column(
+              children: [
+                SizedBox(height: 10,),
+                CategoryBar(),
+                SearchBar(),
+              ],
+            ),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white)
+            ),
+          ),
           Expanded(
-            child: Item()
+            child: ItemPages()
           )
         ],
       ),
@@ -50,10 +62,10 @@ class _HomeState extends State<Home> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('PBL6: HTTT', style: AppTextStyle.heading4Light,),
+          title: const Text('PBL6: HTTT', style: AppTextStyle.heading4Light,),
           titleSpacing: 6,
           leading: IconButton(
-            icon: Icon(Icons.menu),
+            icon: const Icon(Icons.menu),
             onPressed: (){},
           ),
           actions: [
@@ -61,7 +73,7 @@ class _HomeState extends State<Home> {
             IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
             IconButton(onPressed: (){}, icon: Icon(Icons.shopping_cart_outlined))
           ],
-          backgroundColor: DarkTheme.purple,
+          backgroundColor: Colors.blueGrey,
           elevation: 20,
         ),
         body: Container(child: tabs[_selectedIndex],),

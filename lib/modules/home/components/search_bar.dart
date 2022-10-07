@@ -27,25 +27,23 @@ class SearchBar extends StatelessWidget {
           ),
           child: Row(
             children:  [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(left: 24, right: 24),
                 child: Icon(Icons.search,color: Colors.white,),
               ),
-              Expanded(
+              const Expanded(
                 child: TextField(
                   decoration: InputDecoration(
-                      hintText: 'Search',
+                      hintText: 'Tìm kiếm',
                       hintStyle: AppTextStyle.heading4Light,
                       border: InputBorder.none,
                   ),
                 ),
               ),
-              Container(
-                child: FloatingActionButton(
-                  onPressed: (){},
-                  backgroundColor: Colors.grey,
-                  child: Image.asset('assets/images/filter.png'),
-                ),
+              FloatingActionButton(
+                onPressed: (){},
+                backgroundColor: Colors.blueGrey,
+                child: Image.asset('assets/images/filter.png'),
               )
             ],
           ),
