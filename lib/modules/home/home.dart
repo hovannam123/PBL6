@@ -10,10 +10,12 @@ import 'package:pbl6/model/genres.dart';
 import 'package:pbl6/modules/home/components/category_bar.dart';
 import 'package:pbl6/modules/home/components/search_bar.dart';
 
+import '../../model/user.dart';
 import 'components/item_pages.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   State<Home> createState() => _HomeState();
@@ -69,7 +71,7 @@ class _HomeState extends State<Home> {
             onPressed: (){},
           ),
           actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.person_outline)),
+            IconButton(onPressed: (){print(widget.user.name);}, icon: Icon(Icons.person_outline)),
             IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
             IconButton(onPressed: (){}, icon: Icon(Icons.shopping_cart_outlined))
           ],

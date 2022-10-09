@@ -2,9 +2,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_text_style.dart';
+import 'package:pbl6/model/user.dart';
 import 'package:pbl6/modules/register/register.dart';
 
 import '../../config/app_color.dart';
+import '../home/home.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -15,8 +17,45 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
+
+  final lstUser = [
+    new User(id: 1, name: 'Ho Van Nam', phoneNumber: '085827143', email: 'nam@gmail.com', password: '123'),
+    new User(id: 2, name: 'Nguyen Tien Dat', phoneNumber: '433224522', email: 'dat@gmail.com', password: '123'),
+    new User(id: 3, name: 'Hoang Hai', phoneNumber: '1231231', email: 'hai@gmail.com', password: '123'),
+  ];
+
+  bool checkLogin(String email, String pw){
+    for(int i=0;i<=lstUser.length-1;i++){
+      if(lstUser[i].email == email && lstUser[i].password == pw){
+        userLogin = lstUser[i];
+        return true;
+      }
+    }
+    return false;
+  }
+
   bool passwordVisible = false;
   bool checkBox = false;
+  late User userLogin;
+  GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
+  TextEditingController controlEmail = TextEditingController();
+  TextEditingController controlPassword = TextEditingController();
+
+  bool isEmail(String string) {
+    // Null or empty string is invalid
+    if (string == null || string.isEmpty) {
+      return false;
+    }
+
+    const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    final regExp = RegExp(pattern);
+
+    if (!regExp.hasMatch(string)) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   void initState() {
     passwordVisible = true;
@@ -29,7 +68,8 @@ class _LoginState extends State<Login> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
-          child: Container(
+          child: Form(
+            key: _loginKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,27 +89,37 @@ class _LoginState extends State<Login> {
                 ),
                 SizedBox(height: 30,),
                 SizedBox(
-                  height: size.height/15,
+                  height: size.height/13,
                   child: Container(
-                    height: size.height/15,
                     decoration: BoxDecoration(
                       color: DarkTheme.darkBlueIllustration,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
-                      children: const [
+                      children: [
                         Padding(
                           padding: EdgeInsets.only(left: 24, right: 24),
                           child: Icon(Icons.email_outlined,color: Colors.white,),
                         ),
                         Expanded(
-                          child: TextField(
+                          child: TextFormField(
+                            controller: controlEmail,
                             style: AppTextStyle.heading3Light,
                             decoration: InputDecoration(
                                 hintText: 'Enter your email address',
                                 hintStyle: AppTextStyle.heading3Light,
-                                border: InputBorder.none
+                                border: InputBorder.none,
+                                errorStyle: AppTextStyle.heading4Red
                             ),
+                            validator: (value){
+                              if(value == null || value.isEmpty){
+                                return 'Vui lòng nhập email';
+                              }
+                              else if(!isEmail(value)){
+                                return 'Vui lòng nhập đúng định dạng email';
+                              }
+                              return null;
+                            },
                           ),
                         )
                       ],
@@ -78,9 +128,8 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 20,),
                 SizedBox(
-                  height: size.height/15,
+                  height: size.height/13,
                   child: Container(
-                    height: size.height/15,
                     decoration: BoxDecoration(
                       color: DarkTheme.darkBlueIllustration,
                       borderRadius: BorderRadius.circular(10),
@@ -92,13 +141,15 @@ class _LoginState extends State<Login> {
                           child: Icon(Icons.lock_outline_rounded,color: Colors.white,),
                         ),
                         Expanded(
-                          child: TextField(
+                          child: TextFormField(
+                            controller: controlPassword,
                             style: AppTextStyle.heading3Light,
                             obscureText: passwordVisible,
                             decoration: InputDecoration(
                                 hintText: 'Enter your password',
                                 hintStyle: AppTextStyle.heading3Light,
                                 border: InputBorder.none,
+                                errorStyle: AppTextStyle.heading4Red,
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     passwordVisible
@@ -115,6 +166,9 @@ class _LoginState extends State<Login> {
                                   },
                                 ),
                             ),
+                            validator: (value){
+                              return (value == null || value.isEmpty) ? 'Vui lòng nhập password' : null;
+                            },
                           ),
                         )
                       ],
@@ -156,7 +210,19 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.all(Radius.circular(25))
                         )
                       ),
-                      onPressed: (){},
+                      onPressed: (){
+                        if(_loginKey.currentState!.validate()){
+
+                          if(checkLogin(controlEmail.text, controlPassword.text)){
+                            Navigator.push(context, (MaterialPageRoute(builder: (context)=> Home(user: userLogin))));
+                          }
+                          else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Tài khoản hoặc mật khẩu không đúng', style: AppTextStyle.heading4Light,)),
+                            );
+                          }
+                        }
+                      },
                       child: const Center(
                           child: Text('Login', style: AppTextStyle.heading2,)
                       )),

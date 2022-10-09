@@ -96,11 +96,24 @@ class AppTextStyle{
       height: 1.2,
       color: Colors.purpleAccent,
       decoration: TextDecoration.none);
+  static const heading4Red = TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 18,
+      height: 1.2,
+      color: Colors.red,
+      decoration: TextDecoration.none);
   static const h = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 14,
       height: 1.0,
       color: DarkTheme.white,
+      decoration: TextDecoration.none
+  );
+  static const hRed = TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 14,
+      height: 1.0,
+      color: DarkTheme.red,
       decoration: TextDecoration.none
   );
 }
