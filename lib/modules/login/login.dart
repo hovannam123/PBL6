@@ -73,7 +73,10 @@ class _LoginState extends State<Login> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox( child: Image.asset('assets/images/img.png')),
+                Container(
+                  padding: EdgeInsets.only(top: 40, bottom: 30),
+                  child: Image.asset('assets/images/logo_pbl.png', fit: BoxFit.cover),
+                ),
                 const Text('Sign in', style: AppTextStyle.heading1Medium,),
                 const SizedBox(height: 10,),
                 const Text("If you don't have an account.", style: AppTextStyle.heading3Light),

@@ -2,20 +2,24 @@
 class Laptop {
   int? id;
   String? name;
-  String? price;
+  int? price;
   int? amount;
 
   Laptop({this.id, this.name, this.price, this.amount});
 
-  // Genres.fromJson(Map<String, dynamic> json) {
-  //   id = json['id'];
-  //   name = json['name'];
-  // }
-  //
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['id'] = this.id;
-  //   data['name'] = this.name;
-  //   return data;
-  // }
+  Laptop.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    price = json['price'];
+    amount = json['amount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['price'] = this.price;
+    data['amount'] = this.amount;
+    return data;
+  }
 }

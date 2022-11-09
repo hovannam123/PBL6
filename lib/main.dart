@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_color.dart';
-import 'package:pbl6/modules/home/components/item_pages.dart';
-import 'package:pbl6/modules/register/register.dart';
-
+import 'package:pbl6/provider/cartprovider.dart';
+import 'package:pbl6/test.dart';
+import 'package:provider/provider.dart';
+import 'modules/cart/cart_shopping.dart';
 import 'modules/home/home.dart';
 import 'modules/login/login.dart';
 
@@ -15,19 +16,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'PBl6',
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        primarySwatch:Colors.blue,
-        scaffoldBackgroundColor:DarkTheme.darkBackground,
-        textTheme:Theme.of(context).textTheme.apply(
-          bodyColor:Colors.white,
-          displayColor:Colors.white
-        )
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CartProvider>(create: (context)=>CartProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'PBl6',
+        theme: ThemeData(
+          fontFamily: 'Roboto',
+          primarySwatch:Colors.blue,
+          scaffoldBackgroundColor:DarkTheme.darkBackground,
+          textTheme:Theme.of(context).textTheme.apply(
+            bodyColor:Colors.white,
+            displayColor:Colors.white
+          )
+        ),
+        home: const Test(),
       ),
-      home: const Login(),
     );
   }
 }
