@@ -22,6 +22,7 @@ class CartProvider with ChangeNotifier {
     return cart;
   }
 
+
   void _setPrefsItems() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('cart_items', _counter);
@@ -73,6 +74,11 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void delete() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+  }
+
   void removeItem(int id) {
     final index = cart.indexWhere((element) => element.id == id);
     cart.removeAt(index);
@@ -90,6 +96,7 @@ class CartProvider with ChangeNotifier {
     _setPrefsItems();
     notifyListeners();
   }
+
 
   void removeTotalPrice(double productPrice) {
     _totalPrice = _totalPrice - productPrice;

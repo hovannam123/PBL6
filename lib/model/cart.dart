@@ -30,4 +30,5 @@ class Cart {
       'quantity': quantity?.value,
     };
   }
+
 }

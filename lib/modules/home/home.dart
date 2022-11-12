@@ -100,8 +100,10 @@ class _HomeState extends State<Home> {
           body: Container(child: tabs[_selectedIndex],),
           bottomNavigationBar: BottomNavigationBar(
             iconSize: 25,
-            selectedLabelStyle: AppTextStyle.heading3,
+            backgroundColor: Colors.blueGrey,
+            selectedLabelStyle: AppTextStyle.heading3Light,
             unselectedLabelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            unselectedItemColor: Colors.white,
 
             items: [
               BottomNavigationBarItem(
@@ -110,7 +112,7 @@ class _HomeState extends State<Home> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.shop),
-                label: 'Cửa hàng'
+                label: 'Cửa hàng',
               ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.support),

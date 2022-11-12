@@ -26,7 +26,7 @@ class DBHelper {
     await db.execute(
         'CREATE TABLE cart(id INTEGER PRIMARY KEY, productId VARCHAR UNIQUE, productName TEXT, productPrice INTEGER, quantity INTEGER)');
   }
-// inseFuture<int>nto the table
+// insertFuture<int>nto the table
   Future<int> insert(Cart cart) async {
     Database db = await instance.database;
     return await db.insert('cart', cart.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
@@ -39,10 +39,22 @@ class DBHelper {
     return queryResult.map((result) => Cart.fromMap(result)).toList();
   }
 
+  Future<int> updateQuantity(Cart cart) async{
+    Database db = await instance.database;
+    return await db.update('cart', cart.toMap(), where: 'productId = ?', whereArgs: [cart.productId]);
+  }
 
 // deleting an item from the cart screen
   Future<int> deleteCartItem(int id) async {
     Database db = await instance.database;
     return await db.delete('cart', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<void> deleteDatabase() async{
+    Directory directory = await getApplicationDocumentsDirectory();
+    String path = join (directory.path, 'dbUSERS.db');
+    databaseFactory.deleteDatabase(path);
+  }
+
 }
+

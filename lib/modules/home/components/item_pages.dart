@@ -1,9 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_color.dart';
 import 'package:pbl6/config/app_text_style.dart';
-import 'package:pbl6/modules/cart/cart_shopping.dart';
 import 'package:pbl6/modules/detail/detail.dart';
 import 'package:provider/provider.dart';
 
@@ -39,22 +37,6 @@ class _ItemPagesState extends State<ItemPages> {
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
     void saveData(int index) async{
-      // dbHelper
-      //     .insert(
-      //       Cart(
-      //         id: index,
-      //         productId: index.toString(),
-      //         productName: laps[index].name,
-      //         productPrice: laps[index].price,
-      //         quantity: ValueNotifier(1),
-      //       ),
-      // ).then((value) {
-      //   // cart.addTotalPrice(laps[index].price!.toDouble());
-      //   cart.addCounter();
-      //   print('Product Added to cart');
-      // }).onError((error, stackTrace) {
-      //   print(error.toString());
-      // });
       cart.addCounter();
       cart.addTotalPrice(laps[index].price!.toDouble());
       await DBHelper.instance.insert(
@@ -66,6 +48,39 @@ class _ItemPagesState extends State<ItemPages> {
           quantity: ValueNotifier(1),
         ),
       );
+    }
+
+    void checkDataContain(int index) async{
+      List<Cart> list = await DBHelper.instance.getCartList();
+
+      if(list.isEmpty){
+        saveData(index);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sản phẩm đã được thêm vào giỏ hàng', style: AppTextStyle.heading4Light,)),
+        );
+      }
+      else{
+        for(var cart in list){
+          if(cart.id == index){
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Sản phẩm đã có sẵn trong giỏ hàng', style: AppTextStyle.heading4Light,)),
+            );
+            break;
+          }
+          else{
+            saveData(index);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Sản phẩm đã được thêm vào giỏ hàng', style: AppTextStyle.heading4Light,)),
+            );
+            break;
+          }
+        }
+      }
+    }
+
+    void deleteData(){
+      DBHelper.instance.deleteDatabase();
+      cart.delete();
     }
 
     return GridView.builder(
@@ -95,13 +110,9 @@ class _ItemPagesState extends State<ItemPages> {
 
                   FloatingActionButton.extended(
                     heroTag: null,
-                    onPressed: () async{
-                      saveData(index);
-                      listCartShopping = await context.read<CartProvider>().getData();
-                      listCartShopping.forEach((element) { print(element.productPrice);});
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Sản phẩm đã được thêm vào giỏ hàng', style: AppTextStyle.heading4Light,)),
-                      );
+                    onPressed: () {
+                      checkDataContain(index);
+                      // deleteData();
                     },
                     backgroundColor: Colors.blueGrey,
                     label: Text('Thêm vào giỏ'),
