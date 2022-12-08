@@ -39,7 +39,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 100, horizontal: 25),
+          padding: EdgeInsets.symmetric(vertical: 70, horizontal: 25),
           child: Form(
             key: _registerKey,
             child: Column(
@@ -47,29 +47,29 @@ class _RegisterState extends State<Register> {
               children: [
                 Text('Sign up', style: AppTextStyle.heading1Medium,),
                 SizedBox(height: 30,),
-                Text('If you already have an account',style: AppTextStyle.heading3Light,),
+                Text('If you already have an account',style: AppTextStyle.heading3Black,),
                 Row(
                   children: [
-                    Text('You can', style: AppTextStyle.heading3Light,),
+                    Text('You can', style: AppTextStyle.heading3Black,),
                     TextButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context)=> Login()));
                         },
-                        child: Text('Login here !', style: AppTextStyle.heading3Purple,))
+                        child: Text('Login here !', style: AppTextStyle.heading3LightBlue,))
                   ],
                 ),
                 SizedBox(height: 40,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Email', style: AppTextStyle.heading4Light,),),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Email', style: AppTextStyle.heading4Black,),),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width:1),
+                    border: Border.all(color: Colors.grey, width:1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextFormField(
                     decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email_outlined, color: Colors.white,),
+                        prefixIcon: Icon(Icons.email_outlined, color: Colors.black,),
                         hintText: 'Enter your email address',
-                        hintStyle: AppTextStyle.heading3Light,
+                        hintStyle: AppTextStyle.heading3Black,
                         border: InputBorder.none,
                         errorStyle: AppTextStyle.heading4Red
                     ),
@@ -85,17 +85,17 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
                 SizedBox(height: 20,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Username', style: AppTextStyle.heading4Light,),),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Username', style: AppTextStyle.heading4Black,),),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width:1),
+                    border: Border.all(color: Colors.grey, width:1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextFormField(
                     decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.person_outline, color: Colors.white,),
+                        prefixIcon: Icon(Icons.person_outline, color: Colors.black,),
                         hintText: 'Enter your username',
-                        hintStyle: AppTextStyle.heading3Light,
+                        hintStyle: AppTextStyle.heading3Black,
                         border: InputBorder.none,
                         errorStyle: AppTextStyle.heading4Red
                     ),
@@ -105,18 +105,18 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
                 SizedBox(height: 20,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Password', style: AppTextStyle.heading4Light,),),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Password', style: AppTextStyle.heading4Black,),),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width:1),
+                    border: Border.all(color: Colors.grey, width:1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock_outline_rounded, color: Colors.white,),
+                        prefixIcon: Icon(Icons.lock_outline_rounded, color: Colors.black,),
                         hintText: 'Enter your password',
-                        hintStyle: AppTextStyle.heading3Light,
+                        hintStyle: AppTextStyle.heading3Black,
                         border: InputBorder.none,
                         errorStyle: AppTextStyle.heading4Red
                     ),
@@ -127,18 +127,18 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
                 SizedBox(height: 20,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Confirm Password', style: AppTextStyle.heading4Light,),),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: Text('Confirm Password', style: AppTextStyle.heading4Black,),),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width:1),
+                    border: Border.all(color: Colors.grey, width:1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock_outline_rounded, color: Colors.white,),
+                        prefixIcon: Icon(Icons.lock_outline_rounded, color: Colors.black,),
                         hintText: 'Confirm your password',
-                        hintStyle: AppTextStyle.heading3Light,
+                        hintStyle: AppTextStyle.heading3Black,
                         border: InputBorder.none,
                         errorStyle: AppTextStyle.heading4Red
                     ),
@@ -159,7 +159,7 @@ class _RegisterState extends State<Register> {
                   width: size.width,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: DarkTheme.purple,
+                          primary: Colors.lightBlue,
                           minimumSize: const Size(88, 36),
                           shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(25))

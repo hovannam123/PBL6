@@ -47,7 +47,7 @@ class _CategoryBarState extends State<CategoryBar> {
                 width: 110,
                 decoration: selectedIndex == index ? BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.blueGrey
+                    color: Colors.lightBlue
                 ) : const BoxDecoration(color: Colors.transparent),
                 child: Text('${lstGenres?[index].name}', style: AppTextStyle.heading3,),
               ),

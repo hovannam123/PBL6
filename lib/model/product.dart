@@ -3,12 +3,13 @@ class Product {
   String? name;
   String? information;
   String? description;
-  double? price;
+  int? price;
   bool? status;
   int? popular;
   double? rate;
-  String? brand;
-  List<String>? attributes;
+  Brand? brand;
+  List<Attributes>? attributes;
+  List<String>? productImgs;
   Category? category;
 
   Product(
@@ -22,6 +23,7 @@ class Product {
         this.rate,
         this.brand,
         this.attributes,
+        this.productImgs,
         this.category});
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -33,8 +35,14 @@ class Product {
     status = json['status'];
     popular = json['popular'];
     rate = json['rate'];
-    brand = json['brand'];
-    attributes = json['attributes'].cast<String>();
+    brand = json['brand'] != null ? new Brand.fromJson(json['brand']) : null;
+    if (json['attributes'] != null) {
+      attributes = <Attributes>[];
+      json['attributes'].forEach((v) {
+        attributes!.add(new Attributes.fromJson(v));
+      });
+    }
+    productImgs = json['productImgs'].cast<String>();
     category = json['category'] != null
         ? new Category.fromJson(json['category'])
         : null;
@@ -50,8 +58,13 @@ class Product {
     data['status'] = this.status;
     data['popular'] = this.popular;
     data['rate'] = this.rate;
-    data['brand'] = this.brand;
-    data['attributes'] = this.attributes;
+    if (this.brand != null) {
+      data['brand'] = this.brand!.toJson();
+    }
+    if (this.attributes != null) {
+      data['attributes'] = this.attributes!.map((v) => v.toJson()).toList();
+    }
+    data['productImgs'] = this.productImgs;
     if (this.category != null) {
       data['category'] = this.category!.toJson();
     }
@@ -59,10 +72,51 @@ class Product {
   }
 }
 
-class Category {
+class Brand {
+  int? id;
+  String? name;
+
+  Brand({this.id, this.name});
+
+  Brand.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    return data;
+  }
+}
+
+class Attributes {
   int? id;
   String? name;
   String? optionGroup;
+
+  Attributes({this.id, this.name, this.optionGroup});
+
+  Attributes.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    optionGroup = json['optionGroup'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['optionGroup'] = this.optionGroup;
+    return data;
+  }
+}
+
+class Category {
+  int? id;
+  String? name;
+  Null? optionGroup;
 
   Category({this.id, this.name, this.optionGroup});
 

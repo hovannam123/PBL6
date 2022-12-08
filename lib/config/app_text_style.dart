@@ -12,7 +12,7 @@ class AppTextStyle{
     fontSize: 30,
   );
   static const heading1Medium = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 30,
     height: 1.2,
   );
@@ -31,6 +31,13 @@ class AppTextStyle{
       height: 1.2,
       decoration: TextDecoration.none,
       color: Colors.black);
+
+  static const heading2Red = TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 24,
+      height: 1.2,
+      decoration: TextDecoration.none,
+      color: Colors.red);
 
   //==========Heading 3=============
   static const heading3 = TextStyle(fontWeight: FontWeight.w500, fontSize: 20, height: 1.2);
@@ -57,17 +64,23 @@ class AppTextStyle{
       decoration: TextDecoration.none);
 
   static const heading3Black = TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 20,
+      height: 1.2,
+      color: Colors.black,
+      decoration: TextDecoration.none);
+  static const heading3BlackBold = TextStyle(
       fontWeight: FontWeight.w600,
       fontSize: 20,
       height: 1.2,
       color: Colors.black,
       decoration: TextDecoration.none);
 
-  static const heading3Purple = TextStyle(
+  static const heading3LightBlue = TextStyle(
       fontWeight: FontWeight.w600,
       fontSize: 20,
       height: 1.2,
-      color: DarkTheme.purple,
+      color: Colors.lightBlue,
       decoration: TextDecoration.none);
 
   //==========Heading 4=============
@@ -85,8 +98,8 @@ class AppTextStyle{
       color: DarkTheme.white,
       decoration: TextDecoration.none);
   static const heading4Black = TextStyle(
-      fontWeight: FontWeight.w400,
-      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      fontSize: 19,
       height: 1.2,
       color: Colors.black,
       decoration: TextDecoration.none);

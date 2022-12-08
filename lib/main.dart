@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_color.dart';
-import 'package:pbl6/provider/cartprovider.dart';
 import 'package:pbl6/test.dart';
 import 'package:provider/provider.dart';
-import 'modules/cart/cart_shopping.dart';
 import 'modules/home/home.dart';
 import 'modules/login/login.dart';
 
@@ -16,24 +14,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<CartProvider>(create: (context)=>CartProvider()),
-      ],
-      child: MaterialApp(
+    return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'PBl6',
         theme: ThemeData(
-          fontFamily: 'Roboto',
+            fontFamily: 'TNR',
           primarySwatch:Colors.blue,
-          scaffoldBackgroundColor:DarkTheme.darkBackground,
+          scaffoldBackgroundColor:DarkTheme.lightBackground,
           textTheme:Theme.of(context).textTheme.apply(
-            bodyColor:Colors.white,
-            displayColor:Colors.white
+            bodyColor:Colors.black,
+            displayColor:Colors.black
           )
         ),
         home: const Login(),
-      ),
     );
   }
 }

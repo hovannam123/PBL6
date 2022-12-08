@@ -21,6 +21,7 @@ class DarkTheme {
   static const yellow = Color(0xFFFFAF34);
   static const text = Colors.white;
   static const purple = Color(0xFFc10c99);
+  static const lightBackground = Color(0xFFf5f5f5);
 }
 
 class GradientPalette {

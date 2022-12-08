@@ -1,14 +1,13 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pbl6/config/app_color.dart';
 import 'package:pbl6/config/app_text_style.dart';
 import 'package:pbl6/modules/detail/detail.dart';
-import 'package:provider/provider.dart';
 
-import '../../../database/DBHelper.dart';
-import '../../../model/cart.dart';
-import '../../../model/laptop.dart';
-import '../../../provider/cartprovider.dart';
+import '../../../api/api_request.dart';
+import '../../../model/product.dart';
+import 'package:intl/intl.dart';
 
 class ItemPages extends StatefulWidget {
   const ItemPages({Key? key}) : super(key: key);
@@ -16,115 +15,184 @@ class ItemPages extends StatefulWidget {
   State<ItemPages> createState() => _ItemPagesState();
 }
 
-class _ItemPagesState extends State<ItemPages> {
+class _ItemPagesState extends State<ItemPages>{
+  late Future<List<Product>> products;
+  final NumberFormat decimalFormat = NumberFormat.decimalPattern();
+  // late List<Product> products = [];
+  // late List<Product> displayItem = [];
 
-  List<Cart> listCartShopping = [];
+  @override
+  void initState() {
+    super.initState();
+    products = NetworkRequest.fetchProducts();
+    // NetworkRequest.fetchProducts().then((value) => {
+    //   value.forEach((item) {
+    //    setState((){
+    //      products.add(item);
+    //    });
+    //   })
+    // });
+    // displayItem = products;
 
-  List<Laptop> laps = [
-    new Laptop(id: 1, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 50),
-    new Laptop(id: 2, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 60),
-    new Laptop(id: 3, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 70),
-    new Laptop(id: 4, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 80),
-    new Laptop(id: 5, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 90),
-    new Laptop(id: 6, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 100),
-    new Laptop(id: 7, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 110),
-    new Laptop(id: 8, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 120),
-    new Laptop(id: 8, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 130),
-    new Laptop(id: 10, name: 'MSI GF65 Thin 11SC 662VN', amount: 13, price: 140),
-  ];
+  }
+
+  // void update_display(String name){
+  //   setState((){
+  //     displayItem.where((item) => item.name!.toLowerCase().contains(name.toLowerCase())).toList();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartProvider>(context);
-    void saveData(int index) async{
-      cart.addCounter();
-      cart.addTotalPrice(laps[index].price!.toDouble());
-      await DBHelper.instance.insert(
-        Cart(
-          id: index,
-          productId: index.toString(),
-          productName: laps[index].name,
-          productPrice: laps[index].price,
-          quantity: ValueNotifier(1),
-        ),
-      );
-    }
-
-    void checkDataContain(int index) async{
-      List<Cart> list = await DBHelper.instance.getCartList();
-
-      if(list.isEmpty){
-        saveData(index);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sản phẩm đã được thêm vào giỏ hàng', style: AppTextStyle.heading4Light,)),
-        );
-      }
-      else{
-        for(var cart in list){
-          if(cart.id == index){
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Sản phẩm đã có sẵn trong giỏ hàng', style: AppTextStyle.heading4Light,)),
-            );
-            break;
-          }
-          else{
-            saveData(index);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Sản phẩm đã được thêm vào giỏ hàng', style: AppTextStyle.heading4Light,)),
-            );
-            break;
-          }
-        }
-      }
-    }
-
-    void deleteData(){
-      DBHelper.instance.deleteDatabase();
-      cart.delete();
-    }
-
-    return GridView.builder(
-      itemCount: laps.length,
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 250,
-        childAspectRatio: 1.5/2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-      ),
-      itemBuilder: (context, index){
-        return InkWell(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> ItemDetails(lap: laps[index],)));
-          },
-          child: Container(
-              decoration: BoxDecoration(
-                color: DarkTheme.darkGrey,
-                borderRadius: BorderRadius.circular(8)
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Image.asset('assets/images/laptop.png', width: 90, height: 100,),
-                  Text('${laps[index].name}', style: AppTextStyle.heading3Light, textAlign: TextAlign.center,),
-                  Text('Đơn giá: ${laps[index].price}đ',style: AppTextStyle.heading3Light),
-
-                  FloatingActionButton.extended(
-                    heroTag: null,
-                    onPressed: () {
-                      checkDataContain(index);
-                      // deleteData();
-                    },
-                    backgroundColor: Colors.blueGrey,
-                    label: Text('Thêm vào giỏ'),
-                    extendedTextStyle: AppTextStyle.heading4Light,
-                    icon: Icon(Icons.add_shopping_cart_rounded),
+    return FutureBuilder<List<Product>>(
+      future: products,
+      builder: (context, snapshot){
+        if(snapshot.hasData){
+          return GridView.builder(
+            itemCount: snapshot.data!.length,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 1.5/2.8,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index){
+              return InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ItemDetails(product: snapshot.data![index])));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: DarkTheme.white,
+                      borderRadius: BorderRadius.circular(8)
                   ),
-                ],
-              ),
-          ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image.network(snapshot.data![index].productImgs![0],),
+                      Text(
+                        '${snapshot.data![index].name}',
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.heading3Black,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,),
+                      Text('Đơn giá: ${decimalFormat.format(snapshot.data![index].price)}',style: AppTextStyle.heading3Black),
+
+                      FloatingActionButton.extended(
+                        heroTag: null,
+                        onPressed: () {
+                          // checkDataContain(index);
+                          // deleteData();
+                        },
+                        backgroundColor: Colors.lightBlue,
+                        label: const Text('Thêm vào giỏ'),
+                        extendedTextStyle: AppTextStyle.heading4Black,
+                        icon: const Icon(Icons.add_shopping_cart_rounded),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
         );
       },
     );
   }
+  // Widget build(BuildContext context) {
+  //   final Size size = MediaQuery.of(context).size;
+  //   return Column(
+  //     children: [
+  //    Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
+  //     child: SizedBox(
+  //       height: size.height/15,
+  //       child: Container(
+  //         height: size.height/15,
+  //         decoration: BoxDecoration(
+  //           color: Colors.grey,
+  //           borderRadius: BorderRadius.circular(24),
+  //         ),
+  //         child: Row(
+  //           children:  [
+  //             const Padding(
+  //               padding: EdgeInsets.only(left: 24, right: 24),
+  //               child: Icon(Icons.search,color: Colors.white,),
+  //             ),
+  //              Expanded(
+  //               child: TextField(
+  //                 onChanged: (text) => update_display(text),
+  //                 decoration: InputDecoration(
+  //                   hintText: 'Tìm kiếm',
+  //                   hintStyle: AppTextStyle.heading4Light,
+  //                   border: InputBorder.none,
+  //                 ),
+  //               ),
+  //             ),
+  //             FloatingActionButton(
+  //               heroTag: null,
+  //               onPressed: (){},
+  //               backgroundColor: Colors.blueGrey,
+  //               child: Image.asset('assets/images/filter.png'),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   ),
+  //       Expanded(child: GridView.builder(
+  //         itemCount: displayItem.length,
+  //         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+  //           maxCrossAxisExtent: 200,
+  //           childAspectRatio: 1.5/2.8,
+  //           mainAxisSpacing: 10,
+  //           crossAxisSpacing: 10,
+  //         ),
+  //         itemBuilder: (context, index){
+  //           return InkWell(
+  //             onTap: (){
+  //               Navigator.push(context, MaterialPageRoute(builder: (context)=> ItemDetails(product: displayItem[index])));
+  //             },
+  //             child: Container(
+  //               decoration: BoxDecoration(
+  //                   color: DarkTheme.white,
+  //                   borderRadius: BorderRadius.circular(8)
+  //               ),
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                 children: [
+  //                   Image.network(displayItem[index].productImgs![0],),
+  //                   Text(
+  //                     '${displayItem[index].name}',
+  //                     overflow: TextOverflow.ellipsis,
+  //                     style: AppTextStyle.heading3Black,
+  //                     maxLines: 2,
+  //                     textAlign: TextAlign.center,),
+  //                   Text('Đơn giá: ${decimalFormat.format(displayItem[index].price)}',style: AppTextStyle.heading3Black),
+  //
+  //                   FloatingActionButton.extended(
+  //                     heroTag: null,
+  //                     onPressed: () {
+  //                       // checkDataContain(index);
+  //                       // deleteData();
+  //                     },
+  //                     backgroundColor: Colors.lightBlue,
+  //                     label: const Text('Thêm vào giỏ'),
+  //                     extendedTextStyle: AppTextStyle.heading4Black,
+  //                     icon: const Icon(Icons.add_shopping_cart_rounded),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       )
+  //       )
+  //     ],
+  //   );
+
 }
 

@@ -1,34 +1,72 @@
-import 'package:flutter/cupertino.dart';
+import 'package:pbl6/model/product.dart';
 
 class Cart {
-  late final int? id;
-  final String? productId;
-  final String? productName;
-  final int? productPrice;
-  final ValueNotifier<int>? quantity;
+  int? id;
+  User? user;
+  Product? product;
+  int? amount;
 
-  Cart(
-      {required this.id,
-        required this.productId,
-        required this.productName,
-        required this.productPrice,
-        required this.quantity,});
+  Cart({this.id, this.user, this.product, this.amount});
 
-  Cart.fromMap(Map<dynamic, dynamic> data)
-      : id = data['id'],
-        productId = data['productId'],
-        productName = data['productName'],
-        productPrice = data['productPrice'],
-        quantity = ValueNotifier(data['quantity']);
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'productId': productId,
-      'productName': productName,
-      'productPrice': productPrice,
-      'quantity': quantity?.value,
-    };
+  Cart.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    product =
+    json['product'] != null ? new Product.fromJson(json['product']) : null;
+    amount = json['amount'];
   }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    if (this.user != null) {
+      data['user'] = this.user!.toJson();
+    }
+    if (this.product != null) {
+      data['product'] = this.product!.toJson();
+    }
+    data['amount'] = this.amount;
+    return data;
+  }
+}
+
+class User {
+  int? id;
+  String? name;
+  Null? dateOfBirth;
+  String? address;
+  String? phoneNumber;
+  bool? gender;
+  Null? userAccount;
+
+  User(
+      {this.id,
+        this.name,
+        this.dateOfBirth,
+        this.address,
+        this.phoneNumber,
+        this.gender,
+        this.userAccount});
+
+  User.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    dateOfBirth = json['dateOfBirth'];
+    address = json['address'];
+    phoneNumber = json['phoneNumber'];
+    gender = json['gender'];
+    userAccount = json['userAccount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['dateOfBirth'] = this.dateOfBirth;
+    data['address'] = this.address;
+    data['phoneNumber'] = this.phoneNumber;
+    data['gender'] = this.gender;
+    data['userAccount'] = this.userAccount;
+    return data;
+  }
 }

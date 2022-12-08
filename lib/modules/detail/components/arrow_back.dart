@@ -10,11 +10,22 @@ class ArrowBack extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 40),
-      child: IconButton(
-        onPressed: (){
-          Navigator.pop(context);
-        },
-        icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.black,size: 27,),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.black,size: 27,),
+          ),
+          IconButton(
+            onPressed: (){
+            },
+            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black,size: 27,),
+          ),
+        ],
       ),
     );
   }
