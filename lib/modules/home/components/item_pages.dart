@@ -1,198 +1,232 @@
-
+import 'package:filter_list/filter_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pbl6/config/app_color.dart';
 import 'package:pbl6/config/app_text_style.dart';
+import 'package:pbl6/getxcontroller/usercontroller.dart';
+import 'package:pbl6/model/cart.dart';
 import 'package:pbl6/modules/detail/detail.dart';
 
 import '../../../api/api_request.dart';
+import '../../../model/option.dart';
 import '../../../model/product.dart';
 import 'package:intl/intl.dart';
 
 class ItemPages extends StatefulWidget {
   const ItemPages({Key? key}) : super(key: key);
+
   @override
   State<ItemPages> createState() => _ItemPagesState();
 }
 
-class _ItemPagesState extends State<ItemPages>{
-  late Future<List<Product>> products;
+class _ItemPagesState extends State<ItemPages> {
   final NumberFormat decimalFormat = NumberFormat.decimalPattern();
-  // late List<Product> products = [];
-  // late List<Product> displayItem = [];
+  final List<Product> products = [];
+  late Future<bool> addToCart;
+  List<Product> displayItem = [];
+  late List<Option> options = [];
+  UserController userController = Get.put(UserController());
+  late int userId;
 
   @override
   void initState() {
     super.initState();
-    products = NetworkRequest.fetchProducts();
-    // NetworkRequest.fetchProducts().then((value) => {
-    //   value.forEach((item) {
-    //    setState((){
-    //      products.add(item);
-    //    });
-    //   })
-    // });
-    // displayItem = products;
 
+    NetworkRequest.getOption().then((value) =>
+    {
+      value.forEach((item) {
+        setState(() {
+          options.add(item);
+        });
+      })
+    });
+
+    NetworkRequest.fetchProducts().then((value) =>
+    {
+      value.forEach((item) {
+        setState(() {
+          products.add(item);
+        });
+      })
+    });
+    displayItem = products;
+
+    setState((){
+      userId = userController.id.value;
+    });
   }
 
-  // void update_display(String name){
-  //   setState((){
-  //     displayItem.where((item) => item.name!.toLowerCase().contains(name.toLowerCase())).toList();
-  //   });
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Product>>(
-      future: products,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
-          return GridView.builder(
-            itemCount: snapshot.data!.length,
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 1.5/2.8,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-            ),
-            itemBuilder: (context, index){
-              return InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ItemDetails(product: snapshot.data![index])));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: DarkTheme.white,
-                      borderRadius: BorderRadius.circular(8)
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image.network(snapshot.data![index].productImgs![0],),
-                      Text(
-                        '${snapshot.data![index].name}',
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyle.heading3Black,
-                        maxLines: 2,
-                        textAlign: TextAlign.center,),
-                      Text('Đơn giá: ${decimalFormat.format(snapshot.data![index].price)}',style: AppTextStyle.heading3Black),
-
-                      FloatingActionButton.extended(
-                        heroTag: null,
-                        onPressed: () {
-                          // checkDataContain(index);
-                          // deleteData();
-                        },
-                        backgroundColor: Colors.lightBlue,
-                        label: const Text('Thêm vào giỏ'),
-                        extendedTextStyle: AppTextStyle.heading4Black,
-                        icon: const Icon(Icons.add_shopping_cart_rounded),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+  void openFilterDialog() async {
+    await FilterListDialog.display<Option>(
+      context,
+      listData: options,
+      // selectedListData: selectedoptions,
+      choiceChipLabel: (user) => user!.name,
+      validateSelectedItem: (list, val) => list!.contains(val),
+      onItemSearch: (user, query) {
+        return user.name!.toLowerCase().contains(query.toLowerCase());
+      },
+      onApplyButtonClick: (list) {
+        // setState(() {
+        //   selectedUserList = List.from(list!);
+        // });
+        // Navigator.pop(context);
       },
     );
   }
-  // Widget build(BuildContext context) {
-  //   final Size size = MediaQuery.of(context).size;
-  //   return Column(
-  //     children: [
-  //    Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
-  //     child: SizedBox(
-  //       height: size.height/15,
-  //       child: Container(
-  //         height: size.height/15,
-  //         decoration: BoxDecoration(
-  //           color: Colors.grey,
-  //           borderRadius: BorderRadius.circular(24),
-  //         ),
-  //         child: Row(
-  //           children:  [
-  //             const Padding(
-  //               padding: EdgeInsets.only(left: 24, right: 24),
-  //               child: Icon(Icons.search,color: Colors.white,),
-  //             ),
-  //              Expanded(
-  //               child: TextField(
-  //                 onChanged: (text) => update_display(text),
-  //                 decoration: InputDecoration(
-  //                   hintText: 'Tìm kiếm',
-  //                   hintStyle: AppTextStyle.heading4Light,
-  //                   border: InputBorder.none,
-  //                 ),
-  //               ),
-  //             ),
-  //             FloatingActionButton(
-  //               heroTag: null,
-  //               onPressed: (){},
-  //               backgroundColor: Colors.blueGrey,
-  //               child: Image.asset('assets/images/filter.png'),
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   ),
-  //       Expanded(child: GridView.builder(
-  //         itemCount: displayItem.length,
-  //         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-  //           maxCrossAxisExtent: 200,
-  //           childAspectRatio: 1.5/2.8,
-  //           mainAxisSpacing: 10,
-  //           crossAxisSpacing: 10,
-  //         ),
-  //         itemBuilder: (context, index){
-  //           return InkWell(
-  //             onTap: (){
-  //               Navigator.push(context, MaterialPageRoute(builder: (context)=> ItemDetails(product: displayItem[index])));
-  //             },
-  //             child: Container(
-  //               decoration: BoxDecoration(
-  //                   color: DarkTheme.white,
-  //                   borderRadius: BorderRadius.circular(8)
-  //               ),
-  //               child: Column(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                 children: [
-  //                   Image.network(displayItem[index].productImgs![0],),
-  //                   Text(
-  //                     '${displayItem[index].name}',
-  //                     overflow: TextOverflow.ellipsis,
-  //                     style: AppTextStyle.heading3Black,
-  //                     maxLines: 2,
-  //                     textAlign: TextAlign.center,),
-  //                   Text('Đơn giá: ${decimalFormat.format(displayItem[index].price)}',style: AppTextStyle.heading3Black),
-  //
-  //                   FloatingActionButton.extended(
-  //                     heroTag: null,
-  //                     onPressed: () {
-  //                       // checkDataContain(index);
-  //                       // deleteData();
-  //                     },
-  //                     backgroundColor: Colors.lightBlue,
-  //                     label: const Text('Thêm vào giỏ'),
-  //                     extendedTextStyle: AppTextStyle.heading4Black,
-  //                     icon: const Icon(Icons.add_shopping_cart_rounded),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //       )
-  //       )
-  //     ],
-  //   );
 
+  void update_display(String enteredKeyword) {
+    List<Product> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = products;
+    } else {
+      results = products
+          .where((item) =>
+          item.name!.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      displayItem = results;
+    });
+  }
+
+  var a = [
+    DropdownMenuItem(child: Text('dataaaa')),
+    DropdownMenuItem(child: Text('dataaaa')),
+    DropdownMenuItem(child: Text('dataaaa')),
+    DropdownMenuItem(child: Text('dataaaa')),
+    DropdownMenuItem(child: Text('dataaaa')),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery
+        .of(context)
+        .size;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
+          child: SizedBox(
+            height: size.height / 15,
+            child: Container(
+              height: size.height / 15,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 24, right: 24),
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      onChanged: (text) => update_display(text),
+                      decoration: InputDecoration(
+                        hintText: 'Tìm kiếm',
+                        hintStyle: AppTextStyle.heading4Light,
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  FloatingActionButton(
+                    heroTag: null,
+                    onPressed: () {
+                      showDialog(context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: SizedBox(
+                                height: 400,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text('${options[3].optionGroup![0].name}'),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                      );
+                    },
+                    backgroundColor: Colors.blueGrey,
+                    child: Image.asset('assets/images/filter.png'),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+            child: GridView.builder(
+              itemCount: displayItem.length,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 1.5 / 2.8,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+              ),
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ItemDetails(product: displayItem[index])));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: DarkTheme.white,
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Image.network(
+                          displayItem[index].productImgs![0],
+                        ),
+                        Text(
+                          '${displayItem[index].name}',
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle.heading3Black,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                            'Đơn giá: ${decimalFormat.format(
+                                displayItem[index].price)}',
+                            style: AppTextStyle.heading3Black),
+                        FloatingActionButton.extended(
+                          heroTag: null,
+                          onPressed: () {
+                            NetworkRequest.addToCart(userId, displayItem[index].id ?? 0).then((value) => {
+                              if(value == true){
+                                Get.snackbar('Sản phẩm Laptop','Đã được thêm vào giỏ hàng',snackPosition: SnackPosition.BOTTOM)
+                              }
+                            });
+                          },
+                          backgroundColor: Colors.lightBlue,
+                          label: const Text('Thêm vào giỏ'),
+                          extendedTextStyle: AppTextStyle.heading4Black,
+                          icon: const FaIcon(FontAwesomeIcons.cartPlus),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ))
+      ],
+    );
+  }
 }
-

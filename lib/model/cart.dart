@@ -33,11 +33,11 @@ class Cart {
 class User {
   int? id;
   String? name;
-  Null? dateOfBirth;
+  String? dateOfBirth;
   String? address;
   String? phoneNumber;
   bool? gender;
-  Null? userAccount;
+  String? userAccount;
 
   User(
       {this.id,

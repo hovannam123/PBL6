@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+
 class LoginResponseModel {
   String? token;
   String? type;
@@ -37,11 +40,12 @@ class LoginResponseModel {
 class UserModel {
   int? id;
   String? name;
-  Null? dateOfBirth;
+  String? dateOfBirth;
   String? address;
   String? phoneNumber;
   bool? gender;
-  Null? userAccount;
+  String? userAccount;
+  String? email;
 
   UserModel(
       {this.id,
@@ -50,7 +54,8 @@ class UserModel {
         this.address,
         this.phoneNumber,
         this.gender,
-        this.userAccount});
+        this.userAccount,
+        this.email});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -60,6 +65,7 @@ class UserModel {
     phoneNumber = json['phoneNumber'];
     gender = json['gender'];
     userAccount = json['userAccount'];
+    email = json['email'];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +77,7 @@ class UserModel {
     data['phoneNumber'] = this.phoneNumber;
     data['gender'] = this.gender;
     data['userAccount'] = this.userAccount;
+    data['email'] = this.email;
     return data;
   }
 }
@@ -90,7 +97,6 @@ class Roles {
     return data;
   }
 }
-
 
 
 class LoginRequestModel{

@@ -1,14 +1,16 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pbl6/api/api_request.dart';
 import 'package:pbl6/config/app_text_style.dart';
-import 'package:pbl6/model/login.dart';
-import 'package:pbl6/modules/login/stacklogin.dart';
+import 'package:pbl6/getxcontroller/cartcontroller.dart';
 import 'package:pbl6/modules/register/register.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/app_color.dart';
+import '../../getxcontroller/usercontroller.dart';
+import '../../model/login.dart';
 import '../home/home.dart';
 
 class Login extends StatefulWidget {
@@ -58,6 +60,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final inforController = Get.put(UserController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -221,8 +224,17 @@ class _LoginState extends State<Login> {
                         if(_loginKey.currentState!.validate()){
                           _loginKey.currentState!.save();
                           NetworkRequest.login(requestModel).then((value) => {
-                            print(value.token),
-                            NetworkRequest.setToken(value.token.toString()),
+                            inforController.information(
+                                token: (value.token as String).obs,
+                                id: (value.userModel!.id as int).obs,
+                                name: (value.userModel!.name as String).obs,
+                                address: (value.userModel!.address as String).obs,
+                                dateOfBirth: (value.userModel!.dateOfBirth  ?? "").obs,
+                                phoneNumber: (value.userModel!.phoneNumber as String).obs,
+                                gender: (value.userModel!.gender as bool).obs,
+                                userAccount: (value.userModel!.userAccount ?? "").obs,
+                                email: (value.userModel!.email ?? "namho100901@gmail.com").obs
+                            ),
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>  const Home()))
                           });
                           print(requestModel.toJson());

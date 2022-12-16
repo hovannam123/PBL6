@@ -1,11 +1,14 @@
 
 import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbl6/model/login.dart';
 import 'package:pbl6/model/product.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../getxcontroller/usercontroller.dart';
 import '../model/cart.dart';
+import '../model/option.dart';
 
 
 class NetworkRequest {
@@ -47,9 +50,9 @@ class NetworkRequest {
 
 
   static Future<List<Cart>> getCart(int userId) async{
+    final UserController informationController = Get.put(UserController());
     String url = "https://backendpbl6.herokuapp.com/cart/$userId";
-    String? token = await getToken();
-
+    String token = informationController.token.value.toString();
     final response = await http.get(
       Uri.parse(url),
       headers: <String, String>{
@@ -67,14 +70,39 @@ class NetworkRequest {
     }
   }
 
-  static void setToken(String token) async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', token);
+  static Future<bool> addToCart(int userId, int idProduct) async{
+    final UserController informationController = Get.put(UserController());
+    String url = "https://backendpbl6.herokuapp.com/cart/$userId";
+    String token = informationController.token.value.toString();
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(<String, String>{
+        'id': '$idProduct',
+      }),
+    );
+    if(response.statusCode == 200 || response.statusCode == 400){
+      return true;
+    }
+    else{
+      throw Exception('Can not request api, the status code is: ${response.statusCode}');
+    }
   }
 
-  static Future<String?> getToken() async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
+  static Future<List<Option>> getOption() async{
+    String url = "https://backendpbl6.herokuapp.com";
+    final response = await http.get(Uri.parse(url));
+    if(response.statusCode == 200){
+      return (json.decode(response.body)as List)
+          .map((e) => Option.fromJson(e))
+          .toList();
+    }
+    else{
+      throw Exception("Can not request api, the status code is: ${response.statusCode}");
+    }
   }
 
 }

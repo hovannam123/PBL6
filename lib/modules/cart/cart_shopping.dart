@@ -1,8 +1,13 @@
 
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pbl6/config/app_text_style.dart';
+import 'package:pbl6/getxcontroller/cartcontroller.dart';
+import 'package:pbl6/getxcontroller/usercontroller.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/api_request.dart';
@@ -10,6 +15,7 @@ import '../../model/cart.dart';
 import '../../model/product.dart';
 import '../../provider/cartprovider.dart';
 import '../detail/detail.dart';
+import 'components/plusminusbuttons.dart';
 
 class CartShopping extends StatefulWidget {
   const CartShopping( {Key? key,
@@ -22,17 +28,32 @@ class CartShopping extends StatefulWidget {
 class _CartShoppingState extends State<CartShopping> {
   bool? allCheck = false;
   late List<bool>? itemCheck;
-  late Future<List<Cart>> cart;
+  final List<Cart> listCart = [];
   final ValueNotifier<int> quantity = ValueNotifier<int>(0);
   final NumberFormat decimalFormat = NumberFormat.decimalPattern();
-
-
+  final UserController userController = Get.put(UserController());
+  final cartController = Get.put(CartController());
 
   @override
   void initState(){
     super.initState();
-    cart = NetworkRequest.getCart(4);
+    NetworkRequest.getCart(userController.id.value).then((carts) => {
+      carts.forEach((item) {
+        setState((){
+          listCart.add(item);
+        });
+      }),
+    cartController.count = listCart.length.obs
+    });
     itemCheck = List<bool>.filled(100, false);
+  }
+
+  double getTotal(){
+    double totalPrice = 0;
+    listCart.forEach((carts) {
+      totalPrice += carts.amount!*(int.parse('${carts.product!.price}'));
+    });
+    return totalPrice;
   }
 
   @override
@@ -80,117 +101,84 @@ class _CartShoppingState extends State<CartShopping> {
                       ],
                     ),
                     SizedBox(width: 20,),
-                    // ValueListenableBuilder(
-                    //     valueListenable: quantity,
-                    //     builder: (context, value, child){
-                    //       return Text('Tổng thanh toán: ${value.toString()}', style: AppTextStyle.heading4Light,);
-                    //     }
-                    // )
-                     Text('Tổng thanh toán: 0đ', style: AppTextStyle.heading4Light,)
+                    Text('Tổng thanh toán: ${getTotal()}')
+
                   ],
                 )
             ),
-          body: FutureBuilder<List<Cart>>(
-            future: cart,
-            builder: (context, snapshot){
-              if(snapshot.hasData){
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index){
-                    return InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context)=> ItemDetails(product: snapshot.data![index].product!)));
-                      },
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 5,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                value: itemCheck![index],
-                                onChanged: (bool? value){
-                                  setState((){
-                                    itemCheck![index] = value!;
-                                  });
-                                },
-                              ),
-                              Image.network('${snapshot.data![index].product?.productImgs?[0]}', width: 100,),
-                              SizedBox(width: 10,),
-                              Column(
+          body: ListView.builder(
+            itemCount: listCart.length,
+            itemBuilder: (context, index){
+              return InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context)=> ItemDetails(product: listCart[index].product!)));
+                },
+                child: Card(
+                  color: Colors.white,
+                  elevation: 5,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: itemCheck![index],
+                          onChanged: (bool? value){
+                            setState((){
+                              itemCheck![index] = value!;
+                            });
+                          },
+                        ),
+                        Image.network('${listCart[index].product?.productImgs?[0]}', width: 100,),
+                        SizedBox(width: 10,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width/1.7,
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width/1.7,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${snapshot.data![index].product?.name}',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          style: AppTextStyle.heading3Black,
-                                          textAlign: TextAlign.left,),
-                                        SizedBox(height: 5,),
-                                        Text(
-                                          'Đơn giá: ${decimalFormat.format(snapshot.data![index].product!.price)}VNĐ',
-                                          style: AppTextStyle.heading4Black,
-                                        ),
-                                      ],
-                                    ),
+                                  // Text('${cartController.listCart[index].brand}'),
+                                  Text(
+                                    '${listCart[index].product?.name}',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: AppTextStyle.heading3Black,
+                                    textAlign: TextAlign.left,),
+                                  SizedBox(height: 5,),
+                                  Text(
+                                    'Đơn giá: ${decimalFormat.format(listCart[index].product!.price)}VNĐ',
+                                    style: AppTextStyle.heading4Black,
                                   ),
-                                  // SizedBox(
-                                  //   child: ValueListenableBuilder<int>(
-                                  //       valueListenable: provider.cart[index].quantity!,
-                                  //       builder: (context, val, child) {
-                                  //         return PlusMinusButtons(
-                                  //           addQuantity: () {
-                                  //             cart.addQuantity(provider.cart[index].id!);
-                                  //             DBHelper.instance.updateQuantity(
-                                  //                 Cart(
-                                  //                   id: index,
-                                  //                   productId: index.toString(),
-                                  //                   productName: provider.cart[index].productName,
-                                  //                   productPrice: provider.cart[index].productPrice,
-                                  //                   quantity: ValueNotifier(provider.cart[index].quantity!.value),
-                                  //                 ))
-                                  //                 .then((value) {
-                                  //               setState(() {
-                                  //                 cart.addTotalPrice(double.parse(
-                                  //                     provider.cart[index].productPrice.toString()));
-                                  //               });
-                                  //             });
-                                  //           },
-                                  //           deleteQuantity: () {
-                                  //             cart.deleteQuantity(
-                                  //                 provider.cart[index].id!);
-                                  //             cart.removeTotalPrice(double.parse(
-                                  //                 provider.cart[index].productPrice
-                                  //                     .toString()));
-                                  //           },
-                                  //           text: val.toString(),
-                                  //         );
-                                  //       }),
-                                  // ),
+                                  ValueListenableBuilder(
+                                      valueListenable: quantity,
+                                      builder: (context, value, child){
+                                        return PlusMinusButtons(
+                                            addQuantity: (){
+                                              quantity.value++;
+                                            },
+                                            deleteQuantity: (){
+                                              if(quantity.value > 1){
+                                                quantity.value--;
+                                              }
+                                            },
+                                            text: value.toString()
+                                        );
+                                      }
+                                  ),
                                 ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }
-              else{
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
             },
-          ),
+          )
         ),
     );
   }
