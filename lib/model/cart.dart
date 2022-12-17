@@ -4,9 +4,9 @@ class Cart {
   int? id;
   User? user;
   Product? product;
-  int? amount;
+  late int amount;
 
-  Cart({this.id, this.user, this.product, this.amount});
+  Cart({required this.id, this.user,required this.product, required this.amount});
 
   Cart.fromJson(Map<String, dynamic> json) {
     id = json['id'];

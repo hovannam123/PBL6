@@ -7,10 +7,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:pbl6/config/app_color.dart';
 import 'package:pbl6/config/app_text_style.dart';
 import 'package:pbl6/getxcontroller/usercontroller.dart';
-import 'package:pbl6/model/cart.dart';
-import 'package:pbl6/modules/detail/detail.dart';
+import 'package:pbl6/modules/detail/item_detail.dart';
 
-import '../../../api/api_request.dart';
+import '../../../api/api_service.dart';
+import '../../../api/api_service.dart';
 import '../../../model/option.dart';
 import '../../../model/product.dart';
 import 'package:intl/intl.dart';
@@ -35,26 +35,24 @@ class _ItemPagesState extends State<ItemPages> {
   void initState() {
     super.initState();
 
-    NetworkRequest.getOption().then((value) =>
-    {
-      value.forEach((item) {
-        setState(() {
-          options.add(item);
+    ApiService.instance.getOption().then((value) => {
+          value.forEach((item) {
+            setState(() {
+              options.add(item);
+            });
+          })
         });
-      })
-    });
 
-    NetworkRequest.fetchProducts().then((value) =>
-    {
-      value.forEach((item) {
-        setState(() {
-          products.add(item);
+    ApiService.instance.fetchProducts().then((value) => {
+          value.forEach((item) {
+            setState(() {
+              products.add(item);
+            });
+          })
         });
-      })
-    });
     displayItem = products;
 
-    setState((){
+    setState(() {
       userId = userController.id.value;
     });
   }
@@ -85,7 +83,7 @@ class _ItemPagesState extends State<ItemPages> {
     } else {
       results = products
           .where((item) =>
-          item.name!.toLowerCase().contains(enteredKeyword.toLowerCase()))
+              item.name!.toLowerCase().contains(enteredKeyword.toLowerCase()))
           .toList();
     }
     setState(() {
@@ -103,9 +101,7 @@ class _ItemPagesState extends State<ItemPages> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery
-        .of(context)
-        .size;
+    final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Padding(
@@ -140,7 +136,8 @@ class _ItemPagesState extends State<ItemPages> {
                   FloatingActionButton(
                     heroTag: null,
                     onPressed: () {
-                      showDialog(context: context,
+                      showDialog(
+                          context: context,
                           builder: (context) {
                             return Dialog(
                               child: SizedBox(
@@ -149,15 +146,15 @@ class _ItemPagesState extends State<ItemPages> {
                                   children: [
                                     Row(
                                       children: [
-                                        Text('${options[3].optionGroup![0].name}'),
+                                        Text(
+                                            '${options[3].optionGroup![0].name}'),
                                       ],
                                     )
                                   ],
                                 ),
                               ),
                             );
-                          }
-                      );
+                          });
                     },
                     backgroundColor: Colors.blueGrey,
                     child: Image.asset('assets/images/filter.png'),
@@ -168,64 +165,70 @@ class _ItemPagesState extends State<ItemPages> {
           ),
         ),
         Expanded(
-            child: GridView.builder(
-              itemCount: displayItem.length,
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                childAspectRatio: 1.5 / 2.8,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-              ),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ItemDetails(product: displayItem[index])));
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: DarkTheme.white,
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Image.network(
-                          displayItem[index].productImgs![0],
-                        ),
-                        Text(
-                          '${displayItem[index].name}',
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyle.heading3Black,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                            'Đơn giá: ${decimalFormat.format(
-                                displayItem[index].price)}',
-                            style: AppTextStyle.heading3Black),
-                        FloatingActionButton.extended(
-                          heroTag: null,
-                          onPressed: () {
-                            NetworkRequest.addToCart(userId, displayItem[index].id ?? 0).then((value) => {
-                              if(value == true){
-                                Get.snackbar('Sản phẩm Laptop','Đã được thêm vào giỏ hàng',snackPosition: SnackPosition.BOTTOM)
-                              }
-                            });
-                          },
-                          backgroundColor: Colors.lightBlue,
-                          label: const Text('Thêm vào giỏ'),
-                          extendedTextStyle: AppTextStyle.heading4Black,
-                          icon: const FaIcon(FontAwesomeIcons.cartPlus),
-                        ),
-                      ],
+            child: displayItem.isEmpty
+                ? const Center(child: CircularProgressIndicator(),)
+                : GridView.builder(
+                    itemCount: displayItem.length,
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 1.5 / 2.8,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
                     ),
-                  ),
-                );
-              },
-            ))
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ItemDetails(
+                                      product: displayItem[index])));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: DarkTheme.white,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Image.network(
+                                displayItem[index].productImgs![0],
+                              ),
+                              Text(
+                                '${displayItem[index].name}',
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyle.heading3Black,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                  'Đơn giá: ${decimalFormat.format(displayItem[index].price)}',
+                                  style: AppTextStyle.heading3Black),
+                              FloatingActionButton.extended(
+                                heroTag: null,
+                                onPressed: () {
+                                  ApiService.instance.addToCart(
+                                      userId, displayItem[index].id ?? 0);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text(
+                                      "Thêm vào giỏ hàng thành công",
+                                      style: AppTextStyle.heading4Light,
+                                    ),
+                                    backgroundColor: Colors.grey,
+                                  ));
+                                },
+                                backgroundColor: Colors.lightBlue,
+                                label: const Text('Thêm vào giỏ'),
+                                extendedTextStyle: AppTextStyle.heading4Black,
+                                icon: const FaIcon(FontAwesomeIcons.cartPlus),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ))
       ],
     );
   }

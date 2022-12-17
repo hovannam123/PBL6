@@ -1,12 +1,9 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pbl6/config/app_text_style.dart';
 import 'package:pbl6/getxcontroller/cartcontroller.dart';
-import 'package:pbl6/getxcontroller/usercontroller.dart';
 import 'package:pbl6/model/cart.dart';
 import 'package:pbl6/modules/home/components/category_bar.dart';
 import 'package:pbl6/modules/home/components/search_bar.dart';
@@ -72,9 +69,14 @@ class _HomeState extends State<Home> {
                 icon: Icon(Icons.person)),
             IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
             Badge(
-              badgeColor: Colors.white,
-              badgeContent: Text('${cartController.count.value}'),
-              position: BadgePosition.topEnd(),
+              label: Text('3'),
+              textColor: Colors.white,
+              alignment: AlignmentDirectional.topEnd,
+              backgroundColor: Colors.grey,
+
+                //left: 50) badgeColor: Colors.white,
+              // badgeContent: Text('${cartController.count.value}'),
+              // position: BadgePosition.topEnd(),
               child: IconButton(
                 onPressed: () {
                   Navigator.push(

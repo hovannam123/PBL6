@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:pbl6/api/api_request.dart';
+import 'package:pbl6/api/api_service.dart';
 import 'package:pbl6/config/app_text_style.dart';
 import 'package:pbl6/getxcontroller/cartcontroller.dart';
 import 'package:pbl6/modules/register/register.dart';
@@ -223,7 +223,7 @@ class _LoginState extends State<Login> {
                       onPressed: (){
                         if(_loginKey.currentState!.validate()){
                           _loginKey.currentState!.save();
-                          NetworkRequest.login(requestModel).then((value) => {
+                          ApiService.instance.login(requestModel).then((value) => {
                             inforController.information(
                                 token: (value.token as String).obs,
                                 id: (value.userModel!.id as int).obs,
@@ -235,9 +235,9 @@ class _LoginState extends State<Login> {
                                 userAccount: (value.userModel!.userAccount ?? "").obs,
                                 email: (value.userModel!.email ?? "namho100901@gmail.com").obs
                             ),
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  const Home()))
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> const Home()))
                           });
-                          print(requestModel.toJson());
+                          print(requestModel.toJson()); 
                         }
                       },
                       child: const Center(

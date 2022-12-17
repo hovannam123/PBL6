@@ -95,7 +95,6 @@ class _ItemDetailsState extends State<ItemDetails> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('Số lượng', style: AppTextStyle.heading3Black,),
               ValueListenableBuilder(
                 valueListenable: quantity,
                 builder: (context, value, child){
@@ -108,7 +107,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                           quantity.value--;
                         }
                       },
-                      text: value.toString()
+                      amount: value.toString()
                   );
                 }
               ),

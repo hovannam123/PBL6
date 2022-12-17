@@ -17,11 +17,11 @@ class StackLogin extends StatelessWidget {
     List<Widget> widgetList = [];
     widgetList.add(child);
     if(isAsyncCall){
-      final stack = new Stack(
-        children: [
-          new Opacity(opacity: 0.9),
-          new Center(
-            child: new CircularProgressIndicator(),
+      final stack = Stack(
+        children: const [
+          Opacity(opacity: 0.9),
+          Center(
+            child: CircularProgressIndicator(),
           )
         ],
       );

@@ -128,7 +128,11 @@ class _ProfileState extends State<Profile> {
             margin: EdgeInsets.only(bottom: 105),
             color: Colors.white,
             height: 45,
-            child: FlatButton(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  minimumSize: const Size(88, 36)
+              ),
               onPressed: (){},
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
