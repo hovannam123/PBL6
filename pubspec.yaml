@@ -41,6 +41,7 @@ dependencies:
   intl: ^0.17.0
   filter_list: ^1.0.2
   get: ^4.6.5
+  url_launcher: ^6.1.7
 
 
 

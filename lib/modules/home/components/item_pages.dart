@@ -166,7 +166,9 @@ class _ItemPagesState extends State<ItemPages> {
         ),
         Expanded(
             child: displayItem.isEmpty
-                ? const Center(child: CircularProgressIndicator(),)
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
                 : GridView.builder(
                     itemCount: displayItem.length,
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -207,8 +209,8 @@ class _ItemPagesState extends State<ItemPages> {
                               FloatingActionButton.extended(
                                 heroTag: null,
                                 onPressed: () {
-                                  ApiService.instance.addToCart(
-                                      userId, displayItem[index].id ?? 0);
+                                  ApiService.instance
+                                      .addToCart(displayItem[index].id ?? 0);
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(const SnackBar(
                                     content: Text(

@@ -18,8 +18,10 @@ class ApiService {
 
   UserController informationController = Get.put(UserController());
 
+  String urlRoot = "https://backendpbl6.herokuapp.com";
+
   Future<LoginResponseModel> login(LoginRequestModel requestModel) async {
-    String url = "https://backendpbl6.herokuapp.com/login";
+    String url = "$urlRoot/login";
     final response = await http.post(
       Uri.parse(url),
       headers: <String, String>{
@@ -44,8 +46,7 @@ class ApiService {
   }
 
   Future<List<Product>> fetchProducts() async {
-    final response =
-        await http.get(Uri.parse('https://backendpbl6.herokuapp.com/product'));
+    final response = await http.get(Uri.parse('$urlRoot/product'));
     if (response.statusCode == 200) {
       return parseProducts(response.body);
     } else {
@@ -53,8 +54,8 @@ class ApiService {
     }
   }
 
-  Future<List<Cart>> getCart(int userId) async {
-    String url = "https://backendpbl6.herokuapp.com/cart/$userId";
+  Future<List<Cart>> getCart() async {
+    String url = "$urlRoot/cart/${informationController.id.value}";
     String token = informationController.token.value.toString();
     final response = await http.get(
       Uri.parse(url),
@@ -73,8 +74,8 @@ class ApiService {
     }
   }
 
-  Future<void> addToCart(int userId, int idProduct) async {
-    String url = "https://backendpbl6.herokuapp.com/cart/$userId";
+  Future<void> addToCart(int idProduct) async {
+    String url = "$urlRoot/cart/${informationController.id.value}";
     String token = informationController.token.value.toString();
     await http.post(
       Uri.parse(url),
@@ -88,8 +89,8 @@ class ApiService {
     );
   }
 
-  Future<void> subItemFromCart(int userId, int idProduct) async {
-    String url = "https://backendpbl6.herokuapp.com/cart/$userId";
+  Future<void> subItemFromCart(int idProduct) async {
+    String url = "$urlRoot/cart/${informationController.id.value}";
     String token = informationController.token.value.toString();
     await http.put(
       Uri.parse(url),
@@ -104,7 +105,7 @@ class ApiService {
   }
 
   Future<void> deleteProductFromCart(int idCart) async {
-    String url = "https://backendpbl6.herokuapp.com/cart/$idCart";
+    String url = "$urlRoot/cart/$idCart";
     String token = informationController.token.value.toString();
     await http.delete(
       Uri.parse(url),
@@ -116,7 +117,7 @@ class ApiService {
   }
 
   Future<List<Option>> getOption() async {
-    String url = "https://backendpbl6.herokuapp.com";
+    String url = urlRoot;
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
@@ -125,6 +126,26 @@ class ApiService {
     } else {
       throw Exception(
           "Can not request api, the status code is: ${response.statusCode}");
+    }
+  }
+
+  Future<String> paypal(double amount, List<int> listCart) async {
+    String url = "$urlRoot/payment/paypal";
+    final response = await http.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          "amount": amount,
+          "oderInfor": "no infor",
+          "listCart": listCart,
+          "userId": informationController.id.value
+        }));
+    if (response.statusCode == 200 || response.statusCode == 400) {
+      return response.body;
+    } else {
+      throw Exception(
+          "Can not request api, status Code is: ${response.statusCode}");
     }
   }
 }

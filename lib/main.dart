@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:pbl6/config/app_color.dart';
-import 'package:pbl6/test.dart';
+import 'package:pbl6/testt.dart';
 import 'modules/home/home.dart';
 import 'modules/login/login.dart';
 

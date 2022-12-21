@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:pbl6/api/api_service.dart';
 import 'package:pbl6/config/app_text_style.dart';
 import 'package:pbl6/getxcontroller/cartcontroller.dart';
+import 'package:pbl6/modules/login/loginScreen.dart';
 import 'package:pbl6/modules/register/register.dart';
 
 import '../../config/app_color.dart';
@@ -21,13 +21,13 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
-
   bool passwordVisible = false;
   bool checkBox = false;
   bool checkLogin = false;
   bool isApiCall = false;
+  bool isLogin = true;
   late LoginRequestModel requestModel;
+  late LoginResponseModel responseModel;
   final GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
   TextEditingController controlEmail = TextEditingController();
   TextEditingController controlPassword = TextEditingController();
@@ -53,12 +53,16 @@ class _LoginState extends State<Login> {
     requestModel = LoginRequestModel();
   }
 
-  // @override
-  // Widget build(BuildContext context){
-  //   return StackLogin(child: login(context), isAsyncCall: isApiCall);
-  // }
   @override
   Widget build(BuildContext context) {
+    return LoginScreen(
+      child: login(context),
+      isAsyncCall: isApiCall,
+      isLogin: isLogin,
+    );
+  }
+
+  Widget login(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final inforController = Get.put(UserController());
     return Scaffold(
@@ -84,22 +88,37 @@ class _LoginState extends State<Login> {
                     ), //BorderRadius.all
                   ), //BoxDecoration
                 ),
-                const Text('Sign in', style: AppTextStyle.heading1Medium,),
-                const SizedBox(height: 10,),
-                const Text("If you don't have an account.", style: AppTextStyle.heading3BlackBold),
+                const Text(
+                  'Sign in',
+                  style: AppTextStyle.heading1Medium,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text("If you don't have an account.",
+                    style: AppTextStyle.heading3BlackBold),
                 Row(
                   children: [
-                    const Text('You can', style: AppTextStyle.heading3BlackBold),
+                    const Text('You can',
+                        style: AppTextStyle.heading3BlackBold),
                     TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Register()));
                         },
-                        child: const Text('Register here !', style: AppTextStyle.heading3LightBlue,)),
+                        child: const Text(
+                          'Register here !',
+                          style: AppTextStyle.heading3LightBlue,
+                        )),
                   ],
                 ),
-                const SizedBox(height: 30,),
+                const SizedBox(
+                  height: 30,
+                ),
                 SizedBox(
-                  height: size.height/13,
+                  height: size.height / 13,
                   child: Container(
                     decoration: BoxDecoration(
                       color: DarkTheme.grey,
@@ -109,7 +128,10 @@ class _LoginState extends State<Login> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.only(left: 24, right: 24),
-                          child: Icon(Icons.email_outlined,color: Colors.white,),
+                          child: Icon(
+                            Icons.email_outlined,
+                            color: Colors.white,
+                          ),
                         ),
                         Expanded(
                           child: TextFormField(
@@ -118,17 +140,12 @@ class _LoginState extends State<Login> {
                                 hintText: 'Enter your email address',
                                 hintStyle: AppTextStyle.heading3Black,
                                 border: InputBorder.none,
-                                errorStyle: AppTextStyle.heading4Red
-                            ),
+                                errorStyle: AppTextStyle.heading4Red),
                             onSaved: (input) => requestModel.username = input,
-                                validator: (value){
-                                if(value == null || value.isEmpty){
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
                                 return 'Vui lòng nhập email';
-                                }
-                                else if(!isEmail(value)){
-                                return 'Vui lòng nhập đúng định dạng email';
                               }
-                              return null;
                             },
                           ),
                         )
@@ -136,48 +153,55 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 SizedBox(
-                  height: size.height/13,
+                  height: size.height / 13,
                   child: Container(
                     decoration: BoxDecoration(
                       color: DarkTheme.grey,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
-                      children:  [
+                      children: [
                         const Padding(
                           padding: EdgeInsets.only(left: 24, right: 24),
-                          child: Icon(Icons.lock_outline_rounded,color: Colors.white,),
+                          child: Icon(
+                            Icons.lock_outline_rounded,
+                            color: Colors.white,
+                          ),
                         ),
                         Expanded(
                           child: TextFormField(
                             style: AppTextStyle.heading3Black,
                             obscureText: passwordVisible,
                             decoration: InputDecoration(
-                                hintText: 'Enter your password',
-                                hintStyle: AppTextStyle.heading3Black,
-                                border: InputBorder.none,
-                                errorStyle: AppTextStyle.heading4Red,
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    passwordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: Colors.black,
-                                  ),
-                                  onPressed: () {
-                                    setState((){
-                                      passwordVisible
-                                          ? passwordVisible = false
-                                          : passwordVisible = true;
-                                    });
-                                  },
+                              hintText: 'Enter your password',
+                              hintStyle: AppTextStyle.heading3Black,
+                              border: InputBorder.none,
+                              errorStyle: AppTextStyle.heading4Red,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  passwordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.black,
                                 ),
+                                onPressed: () {
+                                  setState(() {
+                                    passwordVisible
+                                        ? passwordVisible = false
+                                        : passwordVisible = true;
+                                  });
+                                },
+                              ),
                             ),
                             onSaved: (input) => requestModel.password = input,
-                            validator: (value){
-                              return (value == null || value.isEmpty) ? 'Vui lòng nhập password' : null;
+                            validator: (value) {
+                              return (value == null || value.isEmpty)
+                                  ? 'Vui lòng nhập password'
+                                  : null;
                             },
                           ),
                         )
@@ -185,7 +209,9 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -195,71 +221,141 @@ class _LoginState extends State<Login> {
                           value: checkBox,
                           checkColor: Colors.black,
                           side: const BorderSide(color: Colors.black),
-                          onChanged: (bool? newValue){
-                            setState((){
+                          onChanged: (bool? newValue) {
+                            setState(() {
                               checkBox = newValue!;
                             });
                           },
                         ),
-                        const Text('Remember me', style: AppTextStyle.heading4Black,)
+                        const Text(
+                          'Remember me',
+                          style: AppTextStyle.heading4Black,
+                        )
                       ],
                     ),
-                    TextButton(onPressed: (){},
-                        child: const Text('Forget password?', style: AppTextStyle.heading4Black,))
+                    TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Forget password?',
+                          style: AppTextStyle.heading4Black,
+                        ))
                   ],
                 ),
-                SizedBox(height: 30,),
+                SizedBox(
+                  height: 30,
+                ),
                 Container(
                   height: 60,
                   width: size.width,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.lightBlue,
-                        minimumSize: const Size(88, 36),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25))
-                        )
-                      ),
-                      onPressed: (){
-                        if(_loginKey.currentState!.validate()){
+                          primary: Colors.lightBlue,
+                          minimumSize: const Size(88, 36),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)))),
+                      onPressed: () {
+                        if (_loginKey.currentState!.validate()) {
                           _loginKey.currentState!.save();
-                          ApiService.instance.login(requestModel).then((value) => {
-                            inforController.information(
-                                token: (value.token as String).obs,
-                                id: (value.userModel!.id as int).obs,
-                                name: (value.userModel!.name as String).obs,
-                                address: (value.userModel!.address as String).obs,
-                                dateOfBirth: (value.userModel!.dateOfBirth  ?? "").obs,
-                                phoneNumber: (value.userModel!.phoneNumber as String).obs,
-                                gender: (value.userModel!.gender as bool).obs,
-                                userAccount: (value.userModel!.userAccount ?? "").obs,
-                                email: (value.userModel!.email ?? "namho100901@gmail.com").obs
-                            ),
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> const Home()))
+                          setState(() {
+                            isApiCall = true;
                           });
-                          print(requestModel.toJson()); 
+                          ApiService.instance.login(requestModel).then(
+                              (value) => {
+                                    setState(() {
+                                      isApiCall = false;
+                                    }),
+                                    inforController.information(
+                                        token: (value.token as String).obs,
+                                        id: (value.userModel!.id as int).obs,
+                                        name: (value.userModel!.name as String)
+                                            .obs,
+                                        address:
+                                            (value.userModel!.address as String)
+                                                .obs,
+                                        dateOfBirth:
+                                            (value.userModel!.dateOfBirth ?? "")
+                                                .obs,
+                                        phoneNumber: (value.userModel!
+                                                .phoneNumber as String)
+                                            .obs,
+                                        gender: (value
+                                                .userModel!.gender as bool)
+                                            .obs,
+                                        userAccount:
+                                            (value.userModel!.userAccount ?? "")
+                                                .obs,
+                                        email: (value.userModel!.email ??
+                                                "namho100901@gmail.com")
+                                            .obs),
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const Home()))
+                                  },
+                              onError: (err) => {
+                                    setState(() {
+                                      isApiCall = false;
+                                    }),
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                      content: Text(
+                                        "Tài khoản hoặc mật khẩu không đúng.",
+                                        style: AppTextStyle.heading4Light,
+                                      ),
+                                      backgroundColor: Colors.grey,
+                                    ))
+                                  });
                         }
                       },
                       child: const Center(
-                          child: Text('Login', style: AppTextStyle.heading2,)
-                      )),
+                          child: Text(
+                        'Login',
+                        style: AppTextStyle.heading2,
+                      ))),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 const Align(
                   alignment: Alignment.center,
-                  child: Text('or continue with',style: AppTextStyle.heading4Black, ),
+                  child: Text(
+                    'or continue with',
+                    style: AppTextStyle.heading4Black,
+                  ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Center(
                   child: SizedBox(
                     height: 50,
-                    width: size.width/2,
+                    width: size.width / 2,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        FloatingActionButton(heroTag: null, onPressed: (){}, child: Image.asset('assets/images/logo_fb.png',),backgroundColor: Colors.white, ),
-                        FloatingActionButton(heroTag: null, onPressed: (){}, child: Image.asset('assets/images/logo_apple.png',),backgroundColor: Colors.black,),
-                        FloatingActionButton(heroTag: null, onPressed: (){}, child: Image.asset('assets/images/logo_google.png'),backgroundColor: Colors.white,)
+                        FloatingActionButton(
+                          heroTag: null,
+                          onPressed: () {},
+                          child: Image.asset(
+                            'assets/images/logo_fb.png',
+                          ),
+                          backgroundColor: Colors.white,
+                        ),
+                        FloatingActionButton(
+                          heroTag: null,
+                          onPressed: () {},
+                          child: Image.asset(
+                            'assets/images/logo_apple.png',
+                          ),
+                          backgroundColor: Colors.black,
+                        ),
+                        FloatingActionButton(
+                          heroTag: null,
+                          onPressed: () {},
+                          child: Image.asset('assets/images/logo_google.png'),
+                          backgroundColor: Colors.white,
+                        )
                       ],
                     ),
                   ),
