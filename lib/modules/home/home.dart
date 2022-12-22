@@ -29,7 +29,6 @@ class _HomeState extends State<Home> {
         SizedBox(
           height: 10,
         ),
-        CategoryBar(),
         Expanded(child: ItemPages())
       ],
     ),
@@ -74,7 +73,7 @@ class _HomeState extends State<Home> {
               alignment: AlignmentDirectional.topEnd,
               backgroundColor: Colors.grey,
 
-                //left: 50) badgeColor: Colors.white,
+              //left: 50) badgeColor: Colors.white,
               // badgeContent: Text('${cartController.count.value}'),
               // position: BadgePosition.topEnd(),
               child: IconButton(
@@ -106,14 +105,16 @@ class _HomeState extends State<Home> {
           unselectedItemColor: Colors.white,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.production_quantity_limits),
+              icon: const FaIcon(FontAwesomeIcons.computer),
               label: 'Sản phẩm',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.shop),
+              icon: const FaIcon(FontAwesomeIcons.store),
               label: 'Cửa hàng',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.support), label: 'Hỗ trợ'),
+            BottomNavigationBarItem(
+                icon: const FaIcon(FontAwesomeIcons.circleQuestion),
+                label: 'Hỗ trợ'),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.black,

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pbl6/api/api_service.dart';
+import 'package:pbl6/modules/cart/cart_shopping.dart';
 
 class ArrowBack extends StatelessWidget {
   const ArrowBack({
@@ -15,15 +18,28 @@ class ArrowBack extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: (){
+            onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.black,size: 27,),
+            icon: const Icon(
+              Icons.arrow_back_ios_new_outlined,
+              color: Colors.black,
+              size: 27,
+            ),
           ),
           IconButton(
-            onPressed: (){
+            onPressed: () {
+              ApiService.instance.getCart();
+              Navigator.push(
+                  context,
+                  (MaterialPageRoute(
+                      builder: (context) => const CartShopping())));
             },
-            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black,size: 27,),
+            icon: const FaIcon(
+              FontAwesomeIcons.cartShopping,
+              color: Colors.black,
+              size: 27,
+            ),
           ),
         ],
       ),

@@ -254,12 +254,16 @@ class _ItemPagesState extends State<ItemPages> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Image.network(
-                                displayItem[index].productImgs![0],
-                                errorBuilder: (BuildContext context,
-                                    Object exception, StackTrace? stackTrace) {
-                                  return const Text('ð¢');
-                                },
+                              Container(
+                                height: 200,
+                                child: Image.network(
+                                  displayItem[index].productImgs![0],
+                                  errorBuilder: (BuildContext context,
+                                      Object exception,
+                                      StackTrace? stackTrace) {
+                                    return const Text('ð¢');
+                                  },
+                                ),
                               ),
                               Text(
                                 '${displayItem[index].name}',

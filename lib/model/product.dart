@@ -14,17 +14,17 @@ class Product {
 
   Product(
       {this.id,
-        this.name,
-        this.information,
-        this.description,
-        this.price,
-        this.status,
-        this.popular,
-        this.rate,
-        this.brand,
-        this.attributes,
-        this.productImgs,
-        this.category});
+      this.name,
+      this.information,
+      this.description,
+      this.price,
+      this.status,
+      this.popular,
+      this.rate,
+      this.brand,
+      this.attributes,
+      this.productImgs,
+      this.category});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -116,10 +116,9 @@ class Attributes {
 class Category {
   int? id;
   String? name;
-  Null? optionGroup;
+  String? optionGroup;
 
   Category({this.id, this.name, this.optionGroup});
-
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];

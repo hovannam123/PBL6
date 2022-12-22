@@ -52,12 +52,11 @@ class _CartShoppingState extends State<CartShopping> {
     return totalPrice;
   }
 
-  Future<void> _launchUrl(String _url) async {
-    if (await launchUrl(Uri.parse(_url))) {
-      await launchUrl(Uri.parse(_url),
-          webViewConfiguration: WebViewConfiguration());
+  Future<void> _launchUrl(String url) async {
+    if (await launchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.platformDefault);
     } else {
-      throw 'Could not launch $_url';
+      throw 'Could not launch $url';
     }
   }
 
@@ -91,7 +90,7 @@ class _CartShoppingState extends State<CartShopping> {
             style: AppTextStyle.heading4Light,
           ),
           onPressed: () {
-            ApiService.instance.paypal(getTotal() / 2400, listIdCart).then(
+            ApiService.instance.paypal(getTotal() / 24000, listIdCart).then(
                 (url) => {
                       _launchUrl(url.split('"')[1].split('"')[0]),
                     }, onError: (err) {
