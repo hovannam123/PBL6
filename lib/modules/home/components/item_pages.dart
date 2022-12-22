@@ -24,17 +24,49 @@ class ItemPages extends StatefulWidget {
 
 class _ItemPagesState extends State<ItemPages> {
   final NumberFormat decimalFormat = NumberFormat.decimalPattern();
+
   final List<Product> products = [];
   late Future<bool> addToCart;
   List<Product> displayItem = [];
   late List<Option> options = [];
+
   UserController userController = Get.put(UserController());
   late int userId;
+
+  late List<Category> categorys = [
+    Category(id: 0, name: "Tất cả", optionGroup: "null")
+  ];
+  int? selectedIndex = 0;
+  int? idCategory = 4;
 
   @override
   void initState() {
     super.initState();
+    getData();
+    displayItem = products;
 
+    setState(() {
+      userId = userController.id.value;
+    });
+  }
+
+  bool containsElement(Category e) {
+    for (Category element in categorys) {
+      if (element.id.toString().compareTo(e.id.toString()) == 0) return true;
+    }
+    return false;
+  }
+
+  getData() {
+    ApiService.instance.fetchProducts().then((products) => {
+          products.forEach((element) {
+            if (!containsElement(element.category!)) {
+              setState(() {
+                categorys.add(element.category!);
+              });
+            }
+          })
+        });
     ApiService.instance.getOption().then((value) => {
           value.forEach((item) {
             setState(() {
@@ -50,11 +82,6 @@ class _ItemPagesState extends State<ItemPages> {
             });
           })
         });
-    displayItem = products;
-
-    setState(() {
-      userId = userController.id.value;
-    });
   }
 
   void openFilterDialog() async {
@@ -79,9 +106,11 @@ class _ItemPagesState extends State<ItemPages> {
   void update_display(String enteredKeyword) {
     List<Product> results = [];
     if (enteredKeyword.isEmpty) {
-      results = products;
-    } else {
       results = products
+          .where((element) => element.category!.id == idCategory)
+          .toList();
+    } else {
+      results = displayItem
           .where((item) =>
               item.name!.toLowerCase().contains(enteredKeyword.toLowerCase()))
           .toList();
@@ -91,19 +120,51 @@ class _ItemPagesState extends State<ItemPages> {
     });
   }
 
-  var a = [
-    DropdownMenuItem(child: Text('dataaaa')),
-    DropdownMenuItem(child: Text('dataaaa')),
-    DropdownMenuItem(child: Text('dataaaa')),
-    DropdownMenuItem(child: Text('dataaaa')),
-    DropdownMenuItem(child: Text('dataaaa')),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
+        SizedBox(
+          height: 50,
+          child: ListView.builder(
+              itemCount: categorys.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = index;
+                      idCategory = categorys[index].id;
+                      displayItem = products
+                          .where(
+                              (element) => element.category?.id == idCategory)
+                          .toList();
+                    });
+                    if (index == 0) {
+                      setState(() {
+                        displayItem = products;
+                      });
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 16),
+                    alignment: Alignment.center,
+                    width: 110,
+                    decoration: selectedIndex == index
+                        ? BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.lightBlue)
+                        : const BoxDecoration(color: Colors.transparent),
+                    child: Text(
+                      '${categorys[index].name}',
+                      style: AppTextStyle.heading3,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                );
+              }),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
           child: SizedBox(
@@ -195,6 +256,10 @@ class _ItemPagesState extends State<ItemPages> {
                             children: [
                               Image.network(
                                 displayItem[index].productImgs![0],
+                                errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
+                                  return const Text('ð¢');
+                                },
                               ),
                               Text(
                                 '${displayItem[index].name}',
