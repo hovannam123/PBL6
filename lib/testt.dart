@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pbl6/api/api_service.dart';
+import 'package:pbl6/model/order.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyTest extends StatefulWidget {
@@ -12,26 +14,31 @@ class MyTest extends StatefulWidget {
 }
 
 class _MyTestState extends State<MyTest> {
-  final Uri _url = Uri.parse('https://www.facebook.com/');
+  late List<Order> orders = [];
 
-  Future<void> _launchUrl() async {
-    if (await launchUrl(_url)) {
-      await launchUrl(_url); //forceWebView is true now
-    } else {
-      throw 'Could not launch $_url';
-    }
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() {
+    ApiService.instance.getOrder().then((value) => {
+          setState(() {
+            orders = value;
+          })
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: IconButton(
-            onPressed: _launchUrl,
-            icon: Icon(Icons.add),
-          ),
-        ),
+      body: ListView.builder(
+        itemCount: orders.length,
+        itemBuilder: (context, index) {
+          return Text(
+              orders[index].bill!.billDetails![0].totalPayable.toString());
+        },
       ),
     );
   }

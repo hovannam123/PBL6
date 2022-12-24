@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbl6/model/login.dart';
+import 'package:pbl6/model/order.dart';
 import 'package:pbl6/model/product.dart';
 
 import '../getxcontroller/usercontroller.dart';
@@ -143,6 +143,26 @@ class ApiService {
         }));
     if (response.statusCode == 200 || response.statusCode == 400) {
       return response.body;
+    } else {
+      throw Exception(
+          "Can not request api, status Code is: ${response.statusCode}");
+    }
+  }
+
+  Future<List<Order>> getOrder() async {
+    String url = "$urlRoot/order/${informationController.id.value}";
+    String token = informationController.token.value.toString();
+    final response = await http.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 400) {
+      return (json.decode(response.body) as List)
+          .map((e) => Order.fromJson(e))
+          .toList();
     } else {
       throw Exception(
           "Can not request api, status Code is: ${response.statusCode}");

@@ -5,9 +5,12 @@ import 'package:get/get.dart';
 import 'package:pbl6/config/app_text_style.dart';
 import 'package:pbl6/getxcontroller/cartcontroller.dart';
 import 'package:pbl6/model/cart.dart';
+import 'package:pbl6/model/order.dart';
 import 'package:pbl6/modules/home/components/category_bar.dart';
 import 'package:pbl6/modules/home/components/search_bar.dart';
+import 'package:pbl6/modules/order/my_order.dart';
 import 'package:pbl6/modules/profile/profile.dart';
+import 'package:pbl6/testt.dart';
 import '../cart/cart_shopping.dart';
 import 'components/item_pages.dart';
 
@@ -66,7 +69,12 @@ class _HomeState extends State<Home> {
                       MaterialPageRoute(builder: (context) => Profile()));
                 },
                 icon: Icon(Icons.person)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const MyOrder()));
+                },
+                icon: Icon(Icons.notifications)),
             Badge(
               label: Text('3'),
               textColor: Colors.white,

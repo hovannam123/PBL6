@@ -140,7 +140,12 @@ class _CartShoppingState extends State<CartShopping> {
               ],
             )),
         body: listCart.isEmpty
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(
+                child: Text(
+                  'Giỏ hàng trống',
+                  style: AppTextStyle.heading3Black,
+                ),
+              )
             : ListView.builder(
                 itemCount: listCart.length,
                 itemBuilder: (context, index) {
