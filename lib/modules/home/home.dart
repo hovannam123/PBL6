@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
                 icon: const FaIcon(FontAwesomeIcons.cartShopping),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             )
           ],
@@ -111,18 +111,17 @@ class _HomeState extends State<Home> {
           unselectedLabelStyle:
               const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           unselectedItemColor: Colors.white,
-          items: [
+          items: const [
             BottomNavigationBarItem(
-              icon: const FaIcon(FontAwesomeIcons.computer),
+              icon: FaIcon(FontAwesomeIcons.computer),
               label: 'Sản phẩm',
             ),
             BottomNavigationBarItem(
-              icon: const FaIcon(FontAwesomeIcons.store),
+              icon: FaIcon(FontAwesomeIcons.store),
               label: 'Cửa hàng',
             ),
             BottomNavigationBarItem(
-                icon: const FaIcon(FontAwesomeIcons.circleQuestion),
-                label: 'Hỗ trợ'),
+                icon: FaIcon(FontAwesomeIcons.circleQuestion), label: 'Hỗ trợ'),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.black,

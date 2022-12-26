@@ -36,7 +36,7 @@ class Order {
 
 class Bill {
   int? id;
-  double? total;
+  num? total;
   String? day;
   bool? type;
   List<BillDetails>? billDetails;

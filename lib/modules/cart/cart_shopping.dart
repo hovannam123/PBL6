@@ -171,57 +171,48 @@ class _CartShoppingState extends State<CartShopping> {
                             SizedBox(
                               width: 10,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width / 1.7,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${listCart[index].product?.name}',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        style: AppTextStyle.heading3Black,
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Đơn giá: ${decimalFormat.format(listCart[index].product!.price)}VNĐ',
-                                        style: AppTextStyle.heading4Black,
-                                      ),
-                                      PlusMinusButtons(
-                                          addQuantity: () {
-                                            ApiService.instance.addToCart(
-                                                listCart[index].product?.id
-                                                    as int);
-                                            setState(() {
-                                              listCart[index].amount++;
-                                            });
-                                          },
-                                          deleteQuantity: () {
-                                            ApiService.instance.subItemFromCart(
-                                                listCart[index].product?.id
-                                                    as int);
-                                            setState(() {
-                                              listCart[index].amount--;
-                                              if (listCart[index].amount == 0) {
-                                                setState(() {
-                                                  listCart.removeAt(index);
-                                                });
-                                              }
-                                            });
-                                          },
-                                          amount: '${listCart[index].amount}'),
-                                    ],
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.7,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${listCart[index].product?.name}',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: AppTextStyle.heading3Black,
+                                    textAlign: TextAlign.left,
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    'Đơn giá: ${decimalFormat.format(listCart[index].product!.price)}VNĐ',
+                                    style: AppTextStyle.heading4Black,
+                                  ),
+                                  PlusMinusButtons(
+                                      addQuantity: () {
+                                        ApiService.instance.addToCart(
+                                            listCart[index].product?.id as int);
+                                        setState(() {
+                                          listCart[index].amount++;
+                                        });
+                                      },
+                                      deleteQuantity: () {
+                                        ApiService.instance.subItemFromCart(
+                                            listCart[index].product?.id as int);
+                                        setState(() {
+                                          listCart[index].amount--;
+                                          if (listCart[index].amount == 0) {
+                                            setState(() {
+                                              listCart.removeAt(index);
+                                            });
+                                          }
+                                        });
+                                      },
+                                      amount: '${listCart[index].amount}'),
+                                ],
+                              ),
                             ),
                             IconButton(
                                 onPressed: () {
