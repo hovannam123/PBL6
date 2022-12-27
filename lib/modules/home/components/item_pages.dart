@@ -44,7 +44,6 @@ class _ItemPagesState extends State<ItemPages> {
     super.initState();
     getData();
     displayItem = products;
-
     setState(() {
       userId = userController.id.value;
     });
@@ -88,18 +87,13 @@ class _ItemPagesState extends State<ItemPages> {
     await FilterListDialog.display<Option>(
       context,
       listData: options,
-      // selectedListData: selectedoptions,
-      choiceChipLabel: (user) => user!.name,
+      selectedListData: options,
+      choiceChipLabel: (option) => option!.name,
       validateSelectedItem: (list, val) => list!.contains(val),
-      onItemSearch: (user, query) {
-        return user.name!.toLowerCase().contains(query.toLowerCase());
+      onItemSearch: (options, query) {
+        return options.name!.toLowerCase().contains(query.toLowerCase());
       },
-      onApplyButtonClick: (list) {
-        // setState(() {
-        //   selectedUserList = List.from(list!);
-        // });
-        // Navigator.pop(context);
-      },
+      onApplyButtonClick: (list) {},
     );
   }
 
@@ -197,25 +191,7 @@ class _ItemPagesState extends State<ItemPages> {
                   FloatingActionButton(
                     heroTag: null,
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: SizedBox(
-                                height: 400,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                            '${options[3].optionGroup![0].name}'),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
+                      openFilterDialog();
                     },
                     backgroundColor: Colors.blueGrey,
                     child: Image.asset('assets/images/filter.png'),
@@ -232,7 +208,8 @@ class _ItemPagesState extends State<ItemPages> {
                   )
                 : GridView.builder(
                     itemCount: displayItem.length,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200,
                       childAspectRatio: 1.5 / 2.8,
                       mainAxisSpacing: 10,
@@ -261,7 +238,7 @@ class _ItemPagesState extends State<ItemPages> {
                                   errorBuilder: (BuildContext context,
                                       Object exception,
                                       StackTrace? stackTrace) {
-                                    return const Text('ð¢');
+                                    return const Center(child: Text('ð¢'));
                                   },
                                 ),
                               ),

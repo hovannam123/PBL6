@@ -28,22 +28,18 @@ class _HomeState extends State<Home> {
   final CartController cartController = Get.put(CartController());
   final tabs = [
     Column(
-      children: [
+      children: const [
         SizedBox(
           height: 10,
         ),
         Expanded(child: ItemPages())
       ],
     ),
-    Container(
-      child: Center(
-        child: Text('cua hang'),
-      ),
+    Center(
+      child: Text('cua hang'),
     ),
-    Container(
-      child: Center(
-        child: Text('ho tro'),
-      ),
+    Center(
+      child: Text('ho tro'),
     ),
   ];
 
@@ -55,7 +51,7 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           title: const Text(
             'COMPUTER STORE',
-            style: AppTextStyle.heading4Light,
+            style: AppTextStyle.heading3Light,
           ),
           titleSpacing: 6,
           leading: IconButton(
@@ -70,20 +66,20 @@ class _HomeState extends State<Home> {
                 },
                 icon: Icon(Icons.person)),
             IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const MyOrder()));
-                },
-                icon: Icon(Icons.notifications)),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const MyOrder()));
+              },
+              icon: Image.asset(
+                'assets/images/icon_order.png',
+                width: 20,
+              ),
+            ),
             Badge(
-              label: Text('3'),
+              label: Text('0'),
               textColor: Colors.white,
               alignment: AlignmentDirectional.topEnd,
               backgroundColor: Colors.grey,
-
-              //left: 50) badgeColor: Colors.white,
-              // badgeContent: Text('${cartController.count.value}'),
-              // position: BadgePosition.topEnd(),
               child: IconButton(
                 onPressed: () {
                   Navigator.push(

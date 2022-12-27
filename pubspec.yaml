@@ -92,13 +92,22 @@ flutter:
          - asset: assets/fonts/Roboto-Light.ttf
            style: italic
      - family: Poppins
-       fonts:
+       fonts: 
          - asset: assets/fonts/Poppins-Light.ttf
            style: italic
      - family: TNR
        fonts:
          - asset: assets/fonts/times new roman.ttf
            style: italic
+     - family: Nunito
+       fonts:
+         - asset: assets/fonts/Nunito-Bold.ttf
+         - asset: assets/fonts/Nunito-BoldItalic.ttf
+         - asset: assets/fonts/Nunito-Italic.ttf
+         - asset: assets/fonts/Nunito-Regular.ttf
+           style: italic
+
+           
 
 
   # For details regarding fonts from package dependencies,

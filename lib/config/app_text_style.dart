@@ -1,12 +1,10 @@
-
-
 import 'package:flutter/material.dart';
 
 import 'app_color.dart';
 
-class AppTextStyle{
+class AppTextStyle {
   static const heading1 =
-  TextStyle(fontWeight: FontWeight.w400, fontSize: 30, height: 1.2);
+      TextStyle(fontWeight: FontWeight.w400, fontSize: 30, height: 1.2);
   static const heading1SemiBold = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 30,
@@ -40,7 +38,8 @@ class AppTextStyle{
       color: Colors.red);
 
   //==========Heading 3=============
-  static const heading3 = TextStyle(fontWeight: FontWeight.w500, fontSize: 20, height: 1.2);
+  static const heading3 =
+      TextStyle(fontWeight: FontWeight.w500, fontSize: 20, height: 1.2);
 
   static const heading3Medium = TextStyle(
       fontWeight: FontWeight.w500,
@@ -65,6 +64,7 @@ class AppTextStyle{
 
   static const heading3Black = TextStyle(
       fontWeight: FontWeight.w500,
+      fontFamily: 'Roboto',
       fontSize: 20,
       height: 1.2,
       color: Colors.black,
@@ -99,7 +99,7 @@ class AppTextStyle{
       decoration: TextDecoration.none);
   static const heading4Black = TextStyle(
       fontWeight: FontWeight.w500,
-      fontSize: 19,
+      fontSize: 20,
       height: 1.2,
       color: Colors.black,
       decoration: TextDecoration.none);
@@ -120,13 +120,11 @@ class AppTextStyle{
       fontSize: 14,
       height: 1.0,
       color: DarkTheme.white,
-      decoration: TextDecoration.none
-  );
+      decoration: TextDecoration.none);
   static const hRed = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 14,
       height: 1.0,
       color: DarkTheme.red,
-      decoration: TextDecoration.none
-  );
+      decoration: TextDecoration.none);
 }

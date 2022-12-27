@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pbl6/config/app_text_style.dart';
+import 'package:pbl6/getxcontroller/cartcontroller.dart';
 import 'package:pbl6/getxcontroller/usercontroller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../api/api_service.dart';
@@ -24,7 +25,7 @@ class _CartShoppingState extends State<CartShopping> {
   late List<int> listIdCart = [];
   final NumberFormat decimalFormat = NumberFormat.decimalPattern();
   final UserController userController = Get.put(UserController());
-  String url = '';
+  int len = 0;
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _CartShoppingState extends State<CartShopping> {
               listCart.add(element);
               listIdCart.add(element.id!);
             });
-          })
+          }),
         });
   }
 

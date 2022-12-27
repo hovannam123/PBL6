@@ -79,8 +79,8 @@ class _LoginState extends State<Login> {
                   width: 150,
                   height: 150,
                   padding: EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                    image: const DecorationImage(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
                       image: AssetImage('assets/images/logo.png'),
                     ), //Border.all
                     borderRadius: BorderRadius.all(
@@ -137,14 +137,14 @@ class _LoginState extends State<Login> {
                           child: TextFormField(
                             style: AppTextStyle.heading3Black,
                             decoration: const InputDecoration(
-                                hintText: 'Enter your email address',
+                                hintText: 'Enter your username',
                                 hintStyle: AppTextStyle.heading3Black,
                                 border: InputBorder.none,
                                 errorStyle: AppTextStyle.heading4Red),
                             onSaved: (input) => requestModel.username = input,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Vui lòng nhập email';
+                                return 'Vui lòng nhập username';
                               }
                             },
                           ),

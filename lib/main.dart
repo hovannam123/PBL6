@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:pbl6/config/app_color.dart';
 import 'package:pbl6/testt.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'PBl6',
       theme: ThemeData(
-          fontFamily: 'TNR',
+          fontFamily: 'Roboto',
           primarySwatch: Colors.lightBlue,
           scaffoldBackgroundColor: DarkTheme.lightBackground,
           textTheme: Theme.of(context)
